@@ -34,9 +34,9 @@ public class ClientHandler extends Thread{
             for (int i = 0; i < ROUNDS; i++) {
 
                 // Gerar uma nova palavra e dica para cada rodada
-                String[] wordInfo = GameServer.getRandomWord();
-                String secretWord = wordInfo[0];
-                String hint = wordInfo[1];
+                String[] gameList = GameServer.getRandomWord();
+                String secretWord = gameList[0];
+                String hint = gameList[1];
 
                 output.println("\nRodada " + (i + 1) + " de " + ROUNDS);
                 output.println("Dica: " + hint);

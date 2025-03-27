@@ -19,18 +19,19 @@ public class GameServer {
     private String hint;
 
     private static final List<ClientHandler> clients = new ArrayList<>();
+    //pra diferenciar os jogadores
     private static int totalPlayers = 0;
 
-
-    public GameServer(){
-        //escolhendo palavras aleatoria pro jogo
-        Random random = new Random();
-        int index = random.nextInt(WORDS.length);
-        secretWord = WORDS[index][0]; //palavra a ser adivinhada
-        hint = WORDS[index][1]; //dica para exatamente aquela palavra
-
-
-    }
+//ficou sem uso, criado pro singleclient
+//    public GameServer(){
+//        //escolhendo palavras aleatoria pro jogo
+//        Random random = new Random();
+//        int index = random.nextInt(WORDS.length);
+//        secretWord = WORDS[index][0]; //palavra a ser adivinhada
+//        hint = WORDS[index][1]; //dica para exatamente aquela palavra
+//
+//
+//    }
 
 
     //start tinha sido feito pro single client, nao ta sendo mais usado
