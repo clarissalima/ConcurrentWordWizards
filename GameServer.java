@@ -67,18 +67,22 @@ public class GameServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Novo jogador conectado!");
 
+
+                //tem que gerar uma aleatoria pra cada rodada
                 // Criar uma palavra aleatória para o jogador
                 String[] wordInfo = getRandomWord();
-                ClientHandler clientHandler = new ClientHandler(clientSocket, wordInfo[0], wordInfo[1]);
+                //instância do ClientHandler com: socket aceito, palavra, dica e numero do jogador (ver classe Client Handler)
+                ClientHandler clientHandler = new ClientHandler(clientSocket, wordInfo[0], wordInfo[1], clients.size() + 1);
                 clients.add(clientHandler);
 
                 // Iniciar a thread do jogador
-               // clientHandler.start();
+            //    clientHandler.start();
             }
 
             System.out.println("Todos os jogadores conectados! O jogo começou.");
 
-            // Iniciar o jogo para todos os jogadores
+//tava fazendo ficar com a mesma palavra
+//            // Iniciar o jogo para todos os jogadores
             for (ClientHandler client : clients) {
                 client.start();
             }

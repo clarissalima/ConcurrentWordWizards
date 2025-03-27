@@ -13,11 +13,13 @@ public class ClientHandler extends Thread{
     private PrintWriter output;
     private int score = 0;
     private static final int ROUNDS = 3; //se quiser mudar a quantidade de rounds só trocar aqui
+    private final int playerNumber;
 
-    public ClientHandler(Socket socket, String word, String hint){
+    public ClientHandler(Socket socket, String word, String hint, int playerNumber){
         this.clientSocket = socket;
         this.secretWord = word;
         this.hint = hint;
+        this.playerNumber = playerNumber;
     }
 
     @Override
@@ -30,6 +32,12 @@ public class ClientHandler extends Thread{
             output.println("Sua palavra foi gerada aleatoriamente.");
 
             for (int i = 0; i < ROUNDS; i++) {
+
+                // Gerar uma nova palavra e dica para cada rodada
+                String[] wordInfo = GameServer.getRandomWord();
+                String secretWord = wordInfo[0];
+                String hint = wordInfo[1];
+
                 output.println("\nRodada " + (i + 1) + " de " + ROUNDS);
                 output.println("Dica: " + hint);
                 output.println("A palavra tem " + secretWord.length() + " letras.");
@@ -39,7 +47,7 @@ public class ClientHandler extends Thread{
                     output.println("Digite a palavra completa: ");
                     String guess = input.readLine();
                     if (guess == null) {
-                        System.out.println("Jogador desconectado.");
+                        System.out.println("Jogador" + playerNumber + "desconectado.");
                         return;
                     }
                     guess = guess.trim().toUpperCase();
@@ -51,7 +59,7 @@ public class ClientHandler extends Thread{
 
                     if (guess.equals(secretWord)) {
                         score += 10;
-                        output.println("Parabéns! Você acertou a palavra: " + secretWord);
+                        output.println("Parabéns, jogador " + playerNumber +"! Você acertou a palavra: " + secretWord);
                         output.println("Sua pontuação atual: " + score + " pontos.");
                         acertou = true;
                     } else {
@@ -62,7 +70,7 @@ public class ClientHandler extends Thread{
             }
 
             output.println("Fim do jogo! Sua pontuação final foi: " + score + " pontos.");
-            System.out.println("Jogador finalizou o jogo com " + score + " pontos.");
+            System.out.println("Jogador " +playerNumber+ " finalizou o jogo com " + score + " pontos.");
         } catch (IOException e) {
             System.out.println("Erro na comunicação com o jogador.");
         } finally {
