@@ -10,7 +10,7 @@ public class GameServer {
             {"SOCKET", "Usado para comunicação em rede."},
             {"TCP", "Protocolo de comunicação confiável, orientado à conexão."},
             {"UDP", "Protocolo de comunicação sem conexão e não confiável."},
-            {"JOIN", "Método usado para garantir que uma thread espere pela conclusão de outra thread."},
+            {"JOIN", "Metodo usado para garantir que uma thread espere pela conclusão de outra thread."},
             {"THREAD", "Execução paralela dentro de um programa."},
             {"DEADLOCK", "Situação onde dois ou mais processos ficam bloqueados esperando uns aos outros."},
             {"NETWORK", "Conjunto de computadores interconectados."}
@@ -62,9 +62,14 @@ public class GameServer {
     // Gera uma lista fixa de palavras aleatórias para cada rodada
     private static void gerarPalavrasParaRodadas() {
         Random random = new Random();
+        // Cria uma lista a partir do array de palavras
+        List<String[]> shuffledWords = new ArrayList<>(Arrays.asList(WORDS));
+        Collections.shuffle(shuffledWords, random); // Embaralha a lista de palavras
+
         // Para cada Round adiciona uma palavra aleatoria na lista palavras rodadas
-        for (int i = 0; i < ClientHandler.ROUNDS; i++) {   // Acessando ROUNDS do ClientHandler
-            palavrasRodadas.add(WORDS[random.nextInt(WORDS.length)]);
+        // As palavras estão em ordem aleatória --> adiciona diretamente para palavrasRodadas
+        for (int i = 0; i < ClientHandler.ROUNDS; i++) {
+            palavrasRodadas.add(shuffledWords.get(i));  // Pega as palavras embaralhadas, sem repetição
         }
     }
 
