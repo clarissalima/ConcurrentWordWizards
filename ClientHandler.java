@@ -1,14 +1,14 @@
 import java.io.*;
 import java.net.Socket;
 
-//essa classe trata cada cliente que se conecta ao servidor
+// Essa classe trata cada cliente que se conecta ao servidor
 public class ClientHandler extends Thread {
     private final Socket clientSocket;
     private BufferedReader input;
     private PrintWriter output;
     private int score = 0;
-    // Publico para que gameserver possa acessar
-    public static final int ROUNDS = 4;  // se quiser mudar a quantidade de rounds só trocar aqui
+    // Público para que GameServer possa acessar
+    public static final int ROUNDS = 4; // Se quiser mudar a quantidade de rounds, só trocar aqui
     private final int playerNumber;
 
     public ClientHandler(Socket socket, int playerNumber) {
@@ -25,7 +25,6 @@ public class ClientHandler extends Thread {
             output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas para jogar.");
 
             for (int i = 0; i < ROUNDS; i++) {
-
                 // Pega a palavra da rodada do servidor
                 String[] wordInfo = GameServer.getPalavraDaRodada(i);
                 String secretWord = wordInfo[0];
@@ -67,11 +66,17 @@ public class ClientHandler extends Thread {
         } catch (IOException e) {
             System.out.println("Erro na comunicação com o jogador.");
         } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            encerrar(); // Garante que os recursos sejam fechados corretamente
+        }
+    }
+
+    public void encerrar() {
+        try {
+            output.println("O jogo acabou! Obrigado por jogar.");
+            clientSocket.close();
+        } catch (IOException e) {
+            System.out.println("Erro ao encerrar conexão com o jogador " + playerNumber);
+            e.printStackTrace();
         }
     }
 }

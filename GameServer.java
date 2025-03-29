@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class GameServer {
@@ -15,29 +16,23 @@ public class GameServer {
             {"DEADLOCK", "Situação onde dois ou mais processos ficam bloqueados esperando uns aos outros."},
             {"NETWORK", "Conjunto de computadores interconectados."}
     };
-    // Cria uma lista de clientes conectados
-    private static final List<ClientHandler> clients = new ArrayList<>();
-    // Instanciar a lista que tera as palavras do jogo
-    private static final List<String[]> palavrasRodadas = new ArrayList<>();
-    //Para diferenciar os jogadores
-    private static int totalPlayers = 0;
 
-    private String secretWord;
-    private String hint;
+    private static final List<ClientHandler> clients = new ArrayList<>();
+    private static final List<String[]> palavrasRodadas = new ArrayList<>();
+    private static int totalPlayers = 0;
+    private static final int GAME_DURATION_SECONDS = 60;
+    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT);
              BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
             System.out.println("Servidor iniciado na porta: " + PORT);
 
-            // Perguntar quantos jogadores participarão
             System.out.print("Quantos jogadores vão participar? ");
             totalPlayers = Integer.parseInt(consoleInput.readLine().trim());
 
-            // Gerar palavras para todas as rodadas antes de os jogadores entrarem
             gerarPalavrasParaRodadas();
 
-            // Esperar todos os jogadores conectarem
             while (clients.size() < totalPlayers) {
                 System.out.println("Aguardando jogador...");
                 Socket clientSocket = serverSocket.accept();
@@ -49,7 +44,7 @@ public class GameServer {
 
             System.out.println("Todos os jogadores conectados! O jogo começou.");
 
-            // Iniciar jogo para cada cliente
+            iniciarTemporizador();
             for (ClientHandler client : clients) {
                 client.start();
             }
@@ -59,23 +54,40 @@ public class GameServer {
         }
     }
 
-    // Gera uma lista fixa de palavras aleatórias para cada rodada
-    private static void gerarPalavrasParaRodadas() {
-        Random random = new Random();
-        // Cria uma lista a partir do array de palavras
-        List<String[]> shuffledWords = new ArrayList<>(Arrays.asList(WORDS));
-        Collections.shuffle(shuffledWords, random); // Embaralha a lista de palavras
+    private static void iniciarTemporizador() {
+        scheduler.schedule(() -> {
+            System.out.println("Tempo acabou! Encerrando o jogo.");
+            encerrarJogo();
+        }, GAME_DURATION_SECONDS, TimeUnit.SECONDS);
 
-        // Para cada Round adiciona uma palavra aleatoria na lista palavras rodadas
-        // As palavras estão em ordem aleatória --> adiciona diretamente para palavrasRodadas
-        for (int i = 0; i < ClientHandler.ROUNDS; i++) {
-            palavrasRodadas.add(shuffledWords.get(i));  // Pega as palavras embaralhadas, sem repetição
+        System.out.println("O temporizador de 1 minuto começou.");
+    }
+
+    private static void encerrarJogo() {
+        try {
+            for (ClientHandler client : clients) {
+                client.encerrar();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            scheduler.shutdown();
+            System.out.println("Jogo encerrado para todos os jogadores.");
+            System.exit(0);
         }
     }
 
-    // Permite que os ClientHandlers acessem a palavra da rodada
+    private static void gerarPalavrasParaRodadas() {
+        Random random = new Random();
+        List<String[]> shuffledWords = new ArrayList<>(Arrays.asList(WORDS));
+        Collections.shuffle(shuffledWords, random);
+
+        for (int i = 0; i < ClientHandler.ROUNDS; i++) {
+            palavrasRodadas.add(shuffledWords.get(i));
+        }
+    }
+
     public static String[] getPalavraDaRodada(int rodada) {
-        // Retorna o array[palavra][dica] da palavra da lista --> isso que garante que as palavras sejam iguais para cada cliente
         return palavrasRodadas.get(rodada);
     }
 }
