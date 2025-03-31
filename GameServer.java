@@ -22,6 +22,7 @@ public class GameServer {
     private static final List<String[]> palavrasRodadas = new ArrayList<>();
     private static int totalPlayers = 0;
     private static final int GAME_DURATION_SECONDS = 30;
+    //agenda tarefa que vai ser chamado depois do GMAE_DURATION_SECONDS: vai chamar o encerrarJogo()
     private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public static void main(String[] args) {
