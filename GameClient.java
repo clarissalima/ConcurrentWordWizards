@@ -1,5 +1,5 @@
 import java.io.*;
-        import java.net.Socket;
+import java.net.Socket;
 import java.util.Scanner;
 
 //essa classe cria conexoes e cria um ClientHandler pra cada conexao (cliente)

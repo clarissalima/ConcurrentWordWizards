@@ -20,7 +20,7 @@ public class GameServer {
     private static final List<ClientHandler> clients = new ArrayList<>();
     private static final List<String[]> palavrasRodadas = new ArrayList<>();
     private static int totalPlayers = 0;
-    private static final int GAME_DURATION_SECONDS = 60;
+    private static final int GAME_DURATION_SECONDS = 30;
     private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public static void main(String[] args) {
