@@ -5,7 +5,7 @@ import java.util.Scanner;
 //essa classe cria conexoes e cria um ClientHandler pra cada conexao (cliente)
 public class GameClient {
     private static final String SERVER_ADDRESS = "localhost"; //se o servidor virar remoto tem que trocar aqui
-    private static final int SERVER_PORT = 12345;
+    private static final int SERVER_PORT = 49160;
 
 
 

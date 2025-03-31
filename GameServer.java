@@ -5,7 +5,8 @@ import java.util.concurrent.*;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class GameServer {
-    private static final int PORT = 12345;
+    //como nao temos autorizacao IANA, devemos usar uma porta entre 49152 e 65535
+    private static final int PORT = 49160;
     private static final String[][] WORDS = {
             {"JAVA", "Linguagem de programação orientada a objetos."},
             {"SOCKET", "Usado para comunicação em rede."},
@@ -60,7 +61,7 @@ public class GameServer {
             encerrarJogo();
         }, GAME_DURATION_SECONDS, TimeUnit.SECONDS);
 
-        System.out.println("O temporizador de 1 minuto começou.");
+        System.out.println("O temporizador de " + GAME_DURATION_SECONDS + " segundos começou.");
     }
 
     private static void encerrarJogo() {
