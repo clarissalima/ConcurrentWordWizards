@@ -4,7 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="new branch" />
+    <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/ConcurrentWordWizards.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.run/GameClient.run.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ClientHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GameClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PalavrasDoJogo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/ConcurrentWordWizards.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.run/GameClient.run.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameClient.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PalavrasDoJogo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,7 +73,7 @@
     "Application.GameServer.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "claraa",
+    "git-widget-placeholder": "Merging claraa",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -60,6 +86,66 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -79,7 +165,8 @@
       <workItem from="1743972803456" duration="1255000" />
       <workItem from="1744062033344" duration="1397000" />
       <workItem from="1744063470280" duration="167000" />
-      <workItem from="1744063646273" duration="868000" />
+      <workItem from="1744063646273" duration="1353000" />
+      <workItem from="1744065028254" duration="365000" />
     </task>
     <task id="LOCAL-00001" summary="new branch">
       <option name="closed" value="true" />
@@ -89,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744063126311</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="new branch">
+      <option name="closed" value="true" />
+      <created>1744064897778</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1744064897778</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -108,6 +203,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="new branch" />
-    <option name="LAST_COMMIT_MESSAGE" value="new branch" />
+    <MESSAGE value="initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
   </component>
 </project>
