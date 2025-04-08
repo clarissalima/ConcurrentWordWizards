@@ -7,9 +7,12 @@ public class ClientHandler extends Thread {
     private BufferedReader input;
     private PrintWriter output;
     private int score = 0;
+    private long startTime;
+    private long endTime;
     // Público para que GameServer possa acessar
     public static final int ROUNDS = 4; // Se quiser mudar a quantidade de rounds, só trocar aqui
     private final int playerNumber;
+    private boolean terminou = false;
 
     public ClientHandler(Socket socket, int playerNumber) {
         this.clientSocket = socket;
@@ -23,6 +26,7 @@ public class ClientHandler extends Thread {
             output = new PrintWriter(clientSocket.getOutputStream(), true);
 
             output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas para jogar.");
+            startTime = System.currentTimeMillis();
 
             for (int i = 0; i < ROUNDS; i++) {
                 // Pega a palavra da rodada do servidor
@@ -61,18 +65,40 @@ public class ClientHandler extends Thread {
                 }
             }
 
-            output.println("Fim do jogo! Sua pontuação final foi: " + score + " pontos.");
+            output.println("Sua pontuação final foi: " + score + " pontos.");
+            endTime = System.currentTimeMillis();
+            GameServer.registrarRanking(playerNumber, score, endTime - startTime);
+            terminou = true;
+            // String rankingFinal = GameServer.getRankingFinal();
+            // enviarRanking(rankingFinal);
             System.out.println("Jogador " + playerNumber + " finalizou o jogo com " + score + " pontos.");
         } catch (IOException e) {
             System.out.println("Erro na comunicação com o jogador.");
         } finally {
-            encerrar(); // Garante que os recursos sejam fechados corretamente
+            GameServer.verificaTerminoJogo();
+            //encerrar(); // Garante que os recursos sejam fechados corretamente
+        }
+    }
+
+    public void enviarRanking(String rankingFinal) {
+        if (output != null) {
+            output.println(rankingFinal);
         }
     }
 
     public void encerrar() {
         try {
-            output.println("O jogo acabou! Obrigado por jogar.");
+
+            //if (!terminou){
+            //    endTime = System.currentTimeMillis();
+            //    GameServer.registrarRanking(playerNumber, score, endTime - startTime);
+            //    terminou = true;
+
+           // }
+            if (output != null) {
+                output.println("O jogo acabou! Obrigado por jogar.");
+            }
+            // output.println("O jogo acabou! Obrigado por jogar.");
             clientSocket.close();
         } catch (IOException e) {
             System.out.println("Erro ao encerrar conexão com o jogador " + playerNumber);

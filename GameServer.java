@@ -9,10 +9,14 @@ public class GameServer {
     private static final int PORT = 49160;
     private static final List<ClientHandler> clients = new ArrayList<>();
     private static final List<String[]> palavrasRodadas = new ArrayList<>();
+    private static final List<RankingJogador> ranking = new ArrayList<>();
     private static int totalPlayers = 0;
     private static int GAME_DURATION_SECONDS;
     //agenda tarefa que vai ser chamado depois do GMAE_DURATION_SECONDS: vai chamar o encerrarJogo()
     private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    private static int jogadoresFinalizados = 0;
+    private static boolean jogoEncerrado = false;
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT);
@@ -95,8 +99,14 @@ public class GameServer {
     }
 
     private static void encerrarJogo() {
+        if (jogoEncerrado) return;
+        jogoEncerrado = true;
         try {
+            String rankingFinal = getRankingFinal();
+            System.out.println(rankingFinal); // Mostrar no terminal do servidor
+
             for (ClientHandler client : clients) {
+                client.enviarRanking(rankingFinal);
                 client.encerrar();
             }
         } catch (Exception e) {
@@ -120,5 +130,56 @@ public class GameServer {
 
     public static String[] getPalavraDaRodada(int rodada) {
         return palavrasRodadas.get(rodada);
+    }
+
+    //classe auxiliar para armazenar dados de pontuação e tempo de cada jogador
+    static class RankingJogador{
+        int playerNumber;
+        int score;
+        long tempo;
+
+        RankingJogador(int playerNumber, int score, long tempo) {
+            this.playerNumber = playerNumber;
+            this.score = score;
+            this.tempo = tempo;
+        }
+    }
+
+    // add no rancking quando um jogador acaba de responder
+    public static synchronized void registrarRanking(int playerNumber, int score, long tempoTotal){
+        ranking.add(new RankingJogador(playerNumber, score, tempoTotal));
+    }
+
+    //verifica se todos os jogadores finalizaram o jogo --> se sim, encerra o jogo para todos
+    //nao estava conseguindo colocar o ranking pros jogadores que tinham encerrado primeiro sem isso
+    public static synchronized void verificaTerminoJogo() {
+        jogadoresFinalizados++;
+        if (jogadoresFinalizados == totalPlayers) {
+            encerrarJogo();
+        }
+    }
+
+    //gera e retorna uma string com o ranking final ordenado por pontuação
+    public static synchronized String getRankingFinal() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n ---------------- Ranking Final ---------------\n");
+
+        if (ranking.isEmpty()) {
+            sb.append("Nenhum jogador terminou a tempo.\n");
+            return sb.toString();
+        }
+
+        ranking.sort(Comparator
+                .comparingInt((RankingJogador r) -> r.score).reversed() // primeiro ordena pela pontuação
+                .thenComparingLong(r -> r.tempo)); //ordena pelo tempo
+
+        // ranking dos tres melhores
+        for (int i = 0; i < Math.min(3, ranking.size()); i++) {
+            RankingJogador r = ranking.get(i);
+            sb.append(String.format("%dº lugar - Jogador %d | Pontos: %d | Tempo: %.2f segundos\n",
+                    i + 1, r.playerNumber, r.score, r.tempo / 1000.0));
+        }
+
+        return sb.toString();
     }
 }
