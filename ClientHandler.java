@@ -12,7 +12,8 @@ public class ClientHandler extends Thread {
     // Público para que GameServer possa acessar
     public static final int ROUNDS = 4; // Se quiser mudar a quantidade de rounds, só trocar aqui
     private final int playerNumber;
-    private boolean terminou = false;
+    public boolean terminou = false;
+    private int rodadasCompletas = 0;;
 
     public ClientHandler(Socket socket, int playerNumber) {
         this.clientSocket = socket;
@@ -55,12 +56,13 @@ public class ClientHandler extends Thread {
 
                     if (guess.equals(secretWord)) {
                         score += 10;
+                        rodadasCompletas++;
                         output.println("Parabéns, jogador " + playerNumber + "! Você acertou a palavra: " + secretWord);
                         output.println("Sua pontuação atual: " + score + " pontos.");
                         acertou = true;
                     } else {
                         output.println("Palavra errada :( Tente de novo.");
-                        output.println("Pontuação atual: " + score + " pontos.");
+                        //output.println("Pontuação atual: " + score + " pontos.");
                     }
                 }
             }
@@ -88,21 +90,21 @@ public class ClientHandler extends Thread {
 
     public void encerrar() {
         try {
+            if (!terminou) {
+                endTime = System.currentTimeMillis();
+                GameServer.registrarRanking(playerNumber, score, endTime - startTime);
+                terminou = true;
 
-            //if (!terminou){
-            //    endTime = System.currentTimeMillis();
-            //    GameServer.registrarRanking(playerNumber, score, endTime - startTime);
-            //    terminou = true;
-
-           // }
+            }
             if (output != null) {
                 output.println("O jogo acabou! Obrigado por jogar.");
+                output.println(GameServer.getRankingFinal()); // Envia ranking imediatamente
             }
             // output.println("O jogo acabou! Obrigado por jogar.");
             clientSocket.close();
         } catch (IOException e) {
             System.out.println("Erro ao encerrar conexão com o jogador " + playerNumber);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }

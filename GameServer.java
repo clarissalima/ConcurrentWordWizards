@@ -71,7 +71,7 @@ public class GameServer {
                 break;
 
             case "medio":
-                GAME_DURATION_SECONDS = 120;
+                GAME_DURATION_SECONDS = 100;
                 break;
 
             case "difícil":
@@ -102,6 +102,11 @@ public class GameServer {
         if (jogoEncerrado) return;
         jogoEncerrado = true;
         try {
+            for (ClientHandler client : clients) {
+                if (!client.terminou) {
+                    client.encerrar(); // Isso agora registra o score parcial
+                }
+            }
             String rankingFinal = getRankingFinal();
             System.out.println(rankingFinal); // Mostrar no terminal do servidor
 
