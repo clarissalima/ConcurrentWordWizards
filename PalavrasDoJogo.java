@@ -52,13 +52,23 @@ public class PalavrasDoJogo {
             case "fácil":
                 palavrasSelecionadas = Arrays.asList(FACIL);
                 break;
+            case "facil":
+                palavrasSelecionadas = Arrays.asList(FACIL);
+                break;
             case "médio":
+                palavrasSelecionadas = Arrays.asList(MEDIO);
+                break;
+            case "medio":
                 palavrasSelecionadas = Arrays.asList(MEDIO);
                 break;
             case "difícil":
                 palavrasSelecionadas = Arrays.asList(DIFICIL);
                 break;
+            case "dificil":
+                palavrasSelecionadas = Arrays.asList(DIFICIL);
+                break;
             default:
+                System.out.println("Modo inválido '" + modo + "'. Usando MEDIO como padrão.");
                 palavrasSelecionadas = Arrays.asList(MEDIO);
         }
 

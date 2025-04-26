@@ -9,14 +9,15 @@ public class ClientHandler extends Thread {
     private int score = 0;
     private long startTime;
     private long endTime;
-    // Público para que GameServer possa acessar
-    public static final int ROUNDS = 4; // Se quiser mudar a quantidade de rounds, só trocar aqui
+    public static final int ROUNDS = 4;
     private final int playerNumber;
+    private final Partida partida;
     private boolean terminou = false;
 
-    public ClientHandler(Socket socket, int playerNumber) {
+    public ClientHandler(Socket socket, int playerNumber, Partida partida) {
         this.clientSocket = socket;
         this.playerNumber = playerNumber;
+        this.partida = partida;
     }
 
     @Override
@@ -29,8 +30,7 @@ public class ClientHandler extends Thread {
             startTime = System.currentTimeMillis();
 
             for (int i = 0; i < ROUNDS; i++) {
-                // Pega a palavra da rodada do servidor
-                String[] wordInfo = GameServer.getPalavraDaRodada(i);
+                String[] wordInfo = partida.getPalavraDaRodada(i);
                 String secretWord = wordInfo[0];
                 String hint = wordInfo[1];
 
@@ -67,16 +67,13 @@ public class ClientHandler extends Thread {
 
             output.println("Sua pontuação final foi: " + score + " pontos.");
             endTime = System.currentTimeMillis();
-            GameServer.registrarRanking(playerNumber, score, endTime - startTime);
+            partida.registrarRanking(playerNumber, score, endTime - startTime);
             terminou = true;
-            // String rankingFinal = GameServer.getRankingFinal();
-            // enviarRanking(rankingFinal);
             System.out.println("Jogador " + playerNumber + " finalizou o jogo com " + score + " pontos.");
         } catch (IOException e) {
             System.out.println("Erro na comunicação com o jogador.");
         } finally {
-            GameServer.verificaTerminoJogo();
-            //encerrar(); // Garante que os recursos sejam fechados corretamente
+            partida.verificaTerminoJogo();
         }
     }
 
@@ -88,21 +85,12 @@ public class ClientHandler extends Thread {
 
     public void encerrar() {
         try {
-
-            //if (!terminou){
-            //    endTime = System.currentTimeMillis();
-            //    GameServer.registrarRanking(playerNumber, score, endTime - startTime);
-            //    terminou = true;
-
-            // }
             if (output != null) {
                 output.println("O jogo acabou! Obrigado por jogar.");
             }
-            // output.println("O jogo acabou! Obrigado por jogar.");
             clientSocket.close();
         } catch (IOException e) {
             System.out.println("Erro ao encerrar conexão com o jogador " + playerNumber);
-            e.printStackTrace();
         }
     }
 }
