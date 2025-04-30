@@ -1,5 +1,7 @@
 import java.util.*;
 import java.util.concurrent.*;
+import java.net.Socket;
+import java.util.List;
 
 public class Partida {
     private final int id;
@@ -13,6 +15,7 @@ public class Partida {
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static int GAME_DURATION_SECONDS;
 
+
     public Partida(int id, String modo, int totalPlayers) {
         this.id = id;
         this.modo = modo;
@@ -20,6 +23,16 @@ public class Partida {
         definirModoJogo(modo);
         gerarPalavrasParaRodadas(modo);
     }
+    private List<Socket> sockets;
+
+    public void setSockets(List<Socket> sockets) {
+        this.sockets = sockets;
+    }
+
+    public List<Socket> getSockets() {
+        return sockets;
+    }
+
 
     // Métodos da partida (similar aos métodos estáticos que estavam em GameServer)
     private static void definirModoJogo(String modo) {
@@ -149,4 +162,11 @@ public class Partida {
             this.tempo = tempo;
         }
     }
+
+    public static int getGameDuration() {
+        return GAME_DURATION_SECONDS;
+    }
+
+
+
 }

@@ -160,4 +160,40 @@ public class GameServer {
             }
         }
     }
+
+    public void iniciarCronometro(int segundosTotais, List<Socket> jogadores) {
+        new Thread(() -> {
+            try {
+                for (int i = segundosTotais; i >= 0; i--) {
+                    String msg;
+                    if (i == segundosTotais) {
+                        msg = " A partida começou! Tempo total: " + segundosTotais + " segundos.";
+
+                    //TA ERRADOOOOOOOOOOOOOOOOOOOOO
+                    } else if (i == 10) {
+                        msg = "Faltam apenas 10 segundos!";
+                    } else if (i == 0) {
+                        msg = "Tempo esgotado! A partida será encerrada.";
+                    } else {
+                        continue;
+                    }
+
+                    for (Socket socket : jogadores) {
+                        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                        out.println(msg);
+                    }
+
+                    System.out.println("[Servidor] " + msg);
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+                System.out.println("Erro no cronômetro: " + e.getMessage());
+            }
+        }).start();
+    }
 }
+
+
+
+
+

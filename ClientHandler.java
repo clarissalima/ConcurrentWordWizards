@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 
 // Essa classe trata cada cliente que se conecta ao servidor
 public class ClientHandler extends Thread {
@@ -18,6 +19,8 @@ public class ClientHandler extends Thread {
         this.clientSocket = socket;
         this.playerNumber = playerNumber;
         this.partida = partida;
+        List<Socket> listaDeSockets = List.of();
+        partida.setSockets(listaDeSockets);
     }
 
     @Override
@@ -28,6 +31,16 @@ public class ClientHandler extends Thread {
 
             output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas para jogar.");
             startTime = System.currentTimeMillis();
+
+
+            //List<Socket> jogadores = partida.getSockets();
+            //new GameServer().iniciarCronometro(60, jogadores);
+
+            if (playerNumber == 1) {
+                new GameServer().iniciarCronometro(Partida.getGameDuration(), partida.getSockets());
+            }
+
+
 
             for (int i = 0; i < ROUNDS; i++) {
                 String[] wordInfo = partida.getPalavraDaRodada(i);
@@ -93,4 +106,6 @@ public class ClientHandler extends Thread {
             System.out.println("Erro ao encerrar conexão com o jogador " + playerNumber);
         }
     }
+
+
 }

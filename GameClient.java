@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
+import static java.lang.System.in;
+
 //essa classe cria conexoes e cria um ClientHandler pra cada conexao (cliente)
 public class GameClient {
     private static final String SERVER_ADDRESS = "localhost"; //se o servidor virar remoto tem que trocar aqui
@@ -11,7 +13,7 @@ public class GameClient {
 
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(in);
         System.out.println("Iniciando cliente...");
 
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
@@ -32,6 +34,7 @@ public class GameClient {
                 }
             }).start();
 
+
             // Enviar tentativas para o servidor
             while (true) {
                 String guess = scanner.nextLine();
@@ -41,6 +44,7 @@ public class GameClient {
         } catch (IOException e) {
             System.out.println("Erro ao conectar ao servidor: " + e.getMessage());
         }
+
 
         scanner.close();
     }
