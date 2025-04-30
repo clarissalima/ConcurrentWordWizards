@@ -25,26 +25,23 @@ public class Partida {
     private static void definirModoJogo(String modo) {
         switch (modo) {
             case "fácil":
-                GAME_DURATION_SECONDS = 180;
-                break;
-
             case "facil":
+            case "Facil":
+            case "Fácil":
                 GAME_DURATION_SECONDS = 180;
                 break;
 
             case "médio":
-                GAME_DURATION_SECONDS = 120;
-                break;
-
             case "medio":
+            case "Medio":
+            case "Médio":
                 GAME_DURATION_SECONDS = 120;
                 break;
 
             case "difícil":
-                GAME_DURATION_SECONDS = 60;
-                break;
-
             case "dificil":
+            case "Difícil":
+            case "Dificil":
                 GAME_DURATION_SECONDS = 60;
                 break;
 
@@ -63,7 +60,7 @@ public class Partida {
         System.out.println("Partida " + id + " - Modo: " + modo +
                 " - Palavras carregadas: " + palavrasRodadas.size());
         if (!palavrasRodadas.isEmpty()) {
-            System.out.println("Primeira palavra: " + palavrasRodadas.get(0)[0] +
+            System.out.println("Primeira palavra." +
                     " - Dica: " + palavrasRodadas.get(0)[1]);
         }
     }
