@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.net.Socket;
@@ -32,8 +33,6 @@ public class Partida {
     public List<Socket> getSockets() {
         return sockets;
     }
-
-
     // Métodos da partida (similar aos métodos estáticos que estavam em GameServer)
     private static void definirModoJogo(String modo) {
         switch (modo) {
@@ -112,6 +111,7 @@ public class Partida {
             client.encerrar();
         }
 
+        RankingPanel.mostrarRanking(ranking);
         scheduler.shutdown();
     }
 
