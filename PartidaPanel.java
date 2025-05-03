@@ -54,7 +54,7 @@ public class PartidaPanel extends JPanel {
             if (timer != null) {
                 timer.stop();
             }
-            GameServer.serverGUI.showMainMenu();
+            GameServer.getServerGUI().showMainMenu();
         });
         footerPanel.add(voltarBtn);
         add(footerPanel, BorderLayout.SOUTH);

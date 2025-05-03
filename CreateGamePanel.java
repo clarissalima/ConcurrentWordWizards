@@ -85,7 +85,8 @@ public class CreateGamePanel extends JPanel {
 
             int players = (int) playersSpinner.getValue();
             try {
-                gui.createNewGame(difficulty, players);
+                int partidaId = GameServer.criarNovaPartida(difficulty, players);
+                gui.showGameCreatedScreen(partidaId);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,
                         "Erro ao criar partida: " + ex.getMessage(),

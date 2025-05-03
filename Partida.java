@@ -157,7 +157,7 @@ public class Partida {
             this.startTime = System.currentTimeMillis(); // Reinicia o timer quando o primeiro jogador entra
         }
 
-        GameServer.serverGUI.atualizarListaPartidas();
+        GameServer.ServerGUI.atualizarListaPartidas();
 
     }
 
