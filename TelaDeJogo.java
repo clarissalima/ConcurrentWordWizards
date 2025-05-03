@@ -65,10 +65,20 @@ public class TelaDeJogo extends JFrame {
         } else {
             resultadoArea.append("Palavra errada. Tente novamente!\n");
         }
+
+        guessField.setText("");
     }
 
     // Método que retorna o palpite do jogador
     public String getPalpite() {
+        palpite = null;
+        while (palpite == null) {
+            try {
+                Thread.sleep(100); // Espera curta para não sobrecarregar a CPU
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return palpite;
     }
 
@@ -81,6 +91,14 @@ public class TelaDeJogo extends JFrame {
             }
         });
     }
+
+    public void atualizarTela(String palavraSecreta, String dica) {
+        this.palavraSecreta = palavraSecreta;
+        dicaLabel.setText("Dica: " + dica);
+        guessField.setText(""); // Limpa o campo de palpite
+        resultadoArea.append("\nNova rodada! Dica: " + dica + "\n");
+    }
+
 
     // Método principal apenas para testes, não faz parte da solução final
     public static void main(String[] args) {

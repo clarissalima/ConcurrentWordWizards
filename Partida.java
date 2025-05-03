@@ -146,8 +146,13 @@ public class Partida {
         return sb.toString();
     }
 
-    public void adicionarJogador(ClientHandler client) {
+    public synchronized void adicionarJogador(ClientHandler client) {
+        if (clients.size() >= totalPlayers) {
+            throw new IllegalStateException("Partida já está cheia");
+        }
         clients.add(client);
+        GameServer.serverGUI.atualizarListaPartidas();
+
     }
 
     public boolean estaCheia() {

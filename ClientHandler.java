@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.List;
 
 // Essa classe trata cada cliente que se conecta ao servidor
@@ -27,82 +28,96 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
+        jogadorTerminou = false;
+        TelaDeJogo tela = null;
+
         try {
+            // Inicialização da interface
+            try {
+                tela = new TelaDeJogo("", "");
+                tela.exibirTela();
+            } catch (Exception e) {
+                System.out.println("Erro ao criar interface do jogador " + playerNumber + ": " + e.getMessage());
+                return;
+            }
+
+            // Configuração de I/O
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream(), true);
 
             output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas para jogar.");
             startTime = System.currentTimeMillis();
 
+            // Inicia temporizador (apenas para o primeiro jogador)
             if (playerNumber == 1) {
-                new GameServer().iniciarCronometro(Partida.getGameDuration(), partida.getSockets());
+                partida.setSockets(Collections.singletonList(clientSocket));  // Lista imutável com 1 socket
+                partida.iniciarTemporizador();  // Usar método da partida, não do GameServer
             }
 
             // Rodadas do jogo
-            for (int i = 0; i < ROUNDS; i++) {
+            for (int i = 0; i < ROUNDS && !partida.estaEncerrada(); i++) {
                 String[] wordInfo = partida.getPalavraDaRodada(i);
-                String secretWord = wordInfo[0];  // palavra secreta
-                String hint = wordInfo[1];       // dica
+                String secretWord = wordInfo[0];
+                String hint = wordInfo[1];
 
+                // Atualiza interface e envia informações
+                tela.atualizarTela(secretWord, hint);
                 output.println("\nRodada " + (i + 1) + " de " + ROUNDS);
                 output.println("Dica: " + hint);
                 output.println("A palavra tem " + secretWord.length() + " letras.");
 
-                // Criar e exibir a interface gráfica para o jogador
-                TelaDeJogo tela = new TelaDeJogo(secretWord, hint);
-                tela.exibirTela();  // Exibe a interface para o jogador
-
                 boolean acertou = false;
+                while (!acertou && !partida.estaEncerrada()) {
+                    String guess = tela.getPalpite();
 
-                while (!acertou) {
-                    String guess = tela.getPalpite();  // Obter o palpite da interface gráfica
+                    // Verifica se o jogo foi encerrado durante a espera
+                    if (partida.estaEncerrada()) {
+                        break;
+                    }
 
-                    if (guess == null) {
-                        System.out.println("Jogador " + playerNumber + " desconectado.");
-                        return;
+                    if (guess == null || guess.isEmpty()) {
+                        continue;
                     }
 
                     guess = guess.trim().toUpperCase();
 
-                    if (guess.isEmpty()) {
-                        output.println("Entrada inválida. Digite uma palavra válida.");
-                        continue;
-                    }
-
                     // Verifica a adivinhação
                     if (guess.equals(secretWord)) {
                         score += 10;
-                        output.println("Parabéns, jogador " + playerNumber + "! Você acertou a palavra: " + secretWord);
-                        output.println("Sua pontuação atual: " + score + " pontos.");
+                        output.println("Parabéns, jogador " + playerNumber + "! Você acertou: " + secretWord);
+                        output.println("Pontuação: " + score);
                         acertou = true;
                     } else {
-                        output.println("Palavra errada :( Tente de novo.");
-                        output.println("Pontuação atual: " + score + " pontos.");
+                        output.println("Palavra errada. Tente novamente!");
                     }
                 }
             }
 
-            output.println("Sua pontuação final foi: " + score + " pontos.");
+            // Finalização
             endTime = System.currentTimeMillis();
-            partida.registrarRanking(playerNumber, score, endTime - startTime);
+            output.println("Sua pontuação final: " + score);
 
-
+            // Registra no ranking
             boolean ultimo = partida.registrarRanking(playerNumber, score, endTime - startTime);
+            System.out.println("Jogador " + playerNumber + " finalizou com " + score + " pontos");
 
-
-            System.out.println("Jogador " + playerNumber + " finalizou o jogo com " + score + " pontos.");
-
-
+            // Se for o último jogador, envia ranking
             if (ultimo) {
-                String ranking = partida.obterRankingFinal(); // ALTERAÇÃO
-                partida.enviarRankingParaTodos(ranking);      // ALTERAÇÃO
+                String ranking = partida.obterRankingFinal();
+                partida.enviarRankingParaTodos(ranking);
             }
 
-
         } catch (IOException e) {
-            System.out.println("Erro na comunicação com o jogador.");
+            System.out.println("Erro na comunicação com jogador " + playerNumber + ": " + e.getMessage());
         } finally {
+            jogadorTerminou = true;
             partida.verificaTerminoJogo();
+
+            // Fecha recursos
+            if (tela != null) {
+                tela.dispose();
+            }
+            encerrar();
         }
     }
 

@@ -11,30 +11,36 @@ public class GameServer {
     private static int nextPartidaId = 1;
     private static ExecutorService executor = Executors.newCachedThreadPool();
 
+    static ServerGUI serverGUI;
+
     public static void main(String[] args) {
+
+        serverGUI = new ServerGUI();
+
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Servidor iniciado na porta: " + PORT);
 
-            // Thread para aceitar comandos do administrador
-            new Thread(() -> {
-                try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
-                    while (true) {
-                        System.out.println("Comandos disponíveis:");
-                        System.out.println("1 - Criar nova partida");
-                        System.out.println("2 - Listar partidas");
-                        System.out.print("Escolha uma opção: ");
 
-                        String opcao = consoleInput.readLine().trim();
-                        if ("1".equals(opcao)) {
-                            criarNovaPartida(consoleInput);
-                        } else if ("2".equals(opcao)) {
-                            listarPartidas();
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            // Thread para aceitar comandos do administrador
+//            new Thread(() -> {
+//                try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
+//                    while (true) {
+//                        System.out.println("Comandos disponíveis:");
+//                        System.out.println("1 - Criar nova partida");
+//                        System.out.println("2 - Listar partidas");
+//                        System.out.print("Escolha uma opção: ");
+//
+//                        String opcao = consoleInput.readLine().trim();
+//                        if ("1".equals(opcao)) {
+//                            criarNovaPartida(consoleInput);
+//                        } else if ("2".equals(opcao)) {
+//                            listarPartidas();
+//                        }
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
 
             // Aceitar conexões de clientes
             while (true) {
@@ -51,18 +57,14 @@ public class GameServer {
         }
     }
 
-    private static void criarNovaPartida(BufferedReader consoleInput) throws IOException {
-        System.out.print("Escolha o modo de jogo (Fácil, Médio, Difícil): ");
-        String modo = consoleInput.readLine().trim().toLowerCase();
-
-        System.out.print("Quantos jogadores vão participar? ");
-        int totalPlayers = Integer.parseInt(consoleInput.readLine().trim());
+    public static void criarNovaPartida(String modo, int totalPlayers) throws IOException {
 
         int partidaId = nextPartidaId++;
         Partida partida = new Partida(partidaId, modo, totalPlayers);
         partidas.put(partidaId, partida);
 
         System.out.println("Partida " + partidaId + " criada! Aguardando jogadores...");
+        serverGUI.atualizarListaPartidas();
     }
 
     private static void listarPartidas() {
@@ -132,6 +134,7 @@ public class GameServer {
                 int playerNumber = partida.clients.size() + 1;
                 ClientHandler clientHandler = new ClientHandler(clientSocket, playerNumber, partida);
                 partida.adicionarJogador(clientHandler);
+                serverGUI.atualizarListaPartidas();
 
                 output.println("Você entrou na partida " + partidaId + " como Jogador " + playerNumber);
 
@@ -152,7 +155,7 @@ public class GameServer {
         } catch (IOException e) {
             System.out.println("Erro ao tratar novo cliente: " + e.getMessage());
             try {
-                if (clientSocket != null && !clientSocket.isClosed()) {
+                if (!clientSocket.isClosed()) {
                     clientSocket.close();
                 }
             } catch (IOException ex) {
