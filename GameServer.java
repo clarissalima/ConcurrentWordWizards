@@ -20,28 +20,6 @@ public class GameServer {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Servidor iniciado na porta: " + PORT);
 
-
-            // Thread para aceitar comandos do administrador
-//            new Thread(() -> {
-//                try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
-//                    while (true) {
-//                        System.out.println("Comandos disponíveis:");
-//                        System.out.println("1 - Criar nova partida");
-//                        System.out.println("2 - Listar partidas");
-//                        System.out.print("Escolha uma opção: ");
-//
-//                        String opcao = consoleInput.readLine().trim();
-//                        if ("1".equals(opcao)) {
-//                            criarNovaPartida(consoleInput);
-//                        } else if ("2".equals(opcao)) {
-//                            listarPartidas();
-//                        }
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-
             // Aceitar conexões de clientes
             while (true) {
                 Socket clientSocket = serverSocket.accept();
@@ -127,6 +105,7 @@ public class GameServer {
 
                 if (partida.estaCheia()) {
                     output.println("Partida já está cheia.");
+                    GameServer.notificarInicioPartida(partidaId);
                     clientSocket.close();
                     return;
                 }
@@ -141,6 +120,7 @@ public class GameServer {
                 if (partida.estaCheia()) {
                     System.out.println("Partida " + partidaId + " iniciando com " + partida.totalPlayers + " jogadores!");
                     partida.iniciarTemporizador();
+                    notificarInicioPartida(partidaId);
                     for (ClientHandler client : partida.clients) {
                         client.start();
                     }
@@ -164,6 +144,20 @@ public class GameServer {
         }
     }
 
+    //notifica inicio da partida
+    public static ConcurrentHashMap<Integer, Partida> getPartidas() {
+        return partidas;
+    }
+
+    public static void notificarInicioPartida(int partidaId) {
+        Partida partida = partidas.get(partidaId);
+        if (partida != null) {
+            String mensagem = "PARTIDA_INICIADA|" + partida.getGameDuration();
+            partida.enviarParaTodos(mensagem);
+            serverGUI.atualizarParaTelaDePartida(partidaId);
+        }
+    }
+
     public void iniciarCronometro(int segundosTotais, List<Socket> jogadores) {
         new Thread(() -> {
             try {
@@ -171,15 +165,12 @@ public class GameServer {
                     String msg;
                     if (i == segundosTotais) {
                         msg = " A partida começou! Tempo total: " + segundosTotais + " segundos.";
-
-                    //TA ERRADOOOOOOOOOOOOOOOOOOOOO
                     } else if (i == 10) {
                         msg = "Faltam apenas 10 segundos!";
                     } else if (i == 0) {
                         msg = "Tempo esgotado! A partida será encerrada.";
                     } else {
-                        Thread.sleep(1000);
-                        continue;
+                        msg = "Tempo restante: " + i + " segundos";
                     }
 
                     for (Socket socket : jogadores) {

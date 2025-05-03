@@ -110,7 +110,7 @@ public class ServerGUI {
         playersLabel.setForeground(Color.WHITE);
         playersLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        SpinnerModel spinnerModel = new SpinnerNumberModel(2, 2, 10, 1);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 10, 1);
         JSpinner playersSpinner = new JSpinner(spinnerModel);
         playersSpinner.setPreferredSize(new Dimension(60, 30));
 
@@ -160,7 +160,7 @@ public class ServerGUI {
         panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
         // Mensagem de sucesso
-        JLabel successLabel = new JLabel("Partida #" + partidaId + " criada com sucesso!");
+        JLabel successLabel = new JLabel("Partida #" + partidaId+1 + " criada com sucesso!");
         successLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
         successLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         successLabel.setForeground(new Color(255, 255, 255));
@@ -197,10 +197,11 @@ public class ServerGUI {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setForeground(new Color(255, 255, 255));
 
-        // Lista de partidas
+        // Lista de partidas em cards
         JPanel gamesPanel = new JPanel();
         gamesPanel.setOpaque(false);
         gamesPanel.setLayout(new BoxLayout(gamesPanel, BoxLayout.Y_AXIS));
+        gamesPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 
         if (partidas.isEmpty()) {
             JLabel emptyLabel = new JLabel("Nenhuma partida ativa no momento");
@@ -211,14 +212,73 @@ public class ServerGUI {
         } else {
             for (Integer id : partidas.keySet()) {
                 Partida p = partidas.get(id);
-                JLabel gameLabel = new JLabel(
-                        String.format("Partida %d - Modo: %s - Jogadores: %d/%d",
-                                id, p.modo, p.clients.size(), p.totalPlayers)
-                );
-                gameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-                gameLabel.setForeground(Color.WHITE);
-                gameLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                gamesPanel.add(gameLabel);
+
+                // Card de partida (estilo Gartic)
+                JPanel cardPanel = new JPanel(new BorderLayout());
+                cardPanel.setOpaque(false);
+
+
+                cardPanel.setBorder(BorderFactory.createCompoundBorder(
+                        // Border 1: Borda externa colorida
+                        BorderFactory.createLineBorder(new Color(255, 215, 220)),
+
+                        // Border 2: Combinação do efeito 3D com margem interna
+                        BorderFactory.createCompoundBorder(
+                                BorderFactory.createRaisedBevelBorder(),
+                                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+                        )
+                ));
+                cardPanel.setMaximumSize(new Dimension(400, 80));
+                cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                // Cabeçalho do card
+                JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                headerPanel.setOpaque(false);
+
+                JLabel idLabel = new JLabel("Partida #" + id);
+                idLabel.setFont(new Font("Arial", Font.BOLD, 18));
+                idLabel.setForeground(new Color(255, 255, 255));
+
+                JLabel modeLabel = new JLabel("(" + p.modo.toUpperCase() + ")");
+                modeLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+                modeLabel.setForeground(new Color(255, 255, 255));
+
+                headerPanel.add(idLabel);
+                headerPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+                headerPanel.add(modeLabel);
+
+                // Barra de progresso de jogadores
+                JProgressBar progressBar = new JProgressBar(0, p.totalPlayers);
+                progressBar.setValue(p.clients.size());
+                progressBar.setString(p.clients.size() + "/" + p.totalPlayers + " jogadores");
+                progressBar.setStringPainted(true);
+                progressBar.setForeground(getColorByMode(p.modo));
+                progressBar.setBackground(new Color(70, 70, 70));
+                progressBar.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+                // Adiciona componentes ao card
+                cardPanel.add(headerPanel, BorderLayout.NORTH);
+                cardPanel.add(progressBar, BorderLayout.CENTER);
+
+                // Efeito hover no card
+                cardPanel.addMouseListener(new MouseAdapter() {
+                    public void mouseEntered(MouseEvent e) {
+                        cardPanel.setBorder(BorderFactory.createCompoundBorder(
+                                BorderFactory.createLineBorder(new Color(255, 255, 255)),
+                                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+                        ));
+                    }
+
+                    public void mouseExited(MouseEvent e) {
+                        cardPanel.setBorder(BorderFactory.createCompoundBorder(
+                                BorderFactory.createLineBorder(new Color(255, 215, 220)),
+                                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+                        ));
+                    }
+                });
+
+                gamesPanel.add(cardPanel);
+                gamesPanel.add(Box.createRigidArea(new Dimension(0, 15)));
             }
         }
 
@@ -230,13 +290,23 @@ public class ServerGUI {
         panel.add(Box.createVerticalGlue());
         panel.add(titleLabel);
         panel.add(Box.createRigidArea(new Dimension(0, 20)));
-        panel.add(gamesPanel);
+        panel.add(new JScrollPane(gamesPanel));
         panel.add(Box.createVerticalGlue());
         panel.add(backButton);
 
         backButton.addActionListener(e -> showMainMenu());
 
         setCurrentPanel(panel);
+    }
+
+    // Método auxiliar para cores por dificuldade (adicione na classe)
+    private Color getColorByMode(String modo) {
+        return switch (modo.toLowerCase()) {
+            case "facil" -> new Color(144, 238, 144); // Verde claro
+            case "medio" -> new Color(255, 215, 0);   // Amarelo ouro
+            case "dificil" -> new Color(255, 99, 71); // Vermelho tomate
+            default -> new Color(173, 216, 230);      // Azul claro
+        };
     }
 
     public void createNewGame(String difficulty, int players) throws IOException {
@@ -309,6 +379,35 @@ public class ServerGUI {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
     }
+
+    public void atualizarParaTelaDePartida(int partidaId) {
+        SwingUtilities.invokeLater(() -> {
+            Partida partida = GameServer.getPartidas().get(partidaId);
+            if (partida != null) {
+                mostrarTelaPartida(partidaId);
+            }
+        });
+    }
+
+    private void mostrarTelaPartida(int partidaId) {
+        Partida partida = GameServer.getPartidas().get(partidaId);
+        if (partida != null) {
+            PartidaPanel panel = new PartidaPanel(partida);
+
+            // Atualiza o cronômetro a cada segundo
+            Timer timer = new Timer(1000, e -> {
+                panel.atualizarTempo(partida.getTempoRestante());
+                if (partida.estaEncerrada()) {
+                    ((Timer)e.getSource()).stop();
+                }
+            });
+            timer.start();
+
+            setCurrentPanel(panel);
+        }
+    }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

@@ -6,7 +6,7 @@ import java.util.List;
 
 // Essa classe trata cada cliente que se conecta ao servidor
 public class ClientHandler extends Thread {
-    private final Socket clientSocket;
+    final Socket clientSocket;
     BufferedReader input;
     PrintWriter output;
     int score = 0;
@@ -32,88 +32,87 @@ public class ClientHandler extends Thread {
         TelaDeJogo tela = null;
 
         try {
-            // Inicialização da interface
+            // 1. Initialize game interface
             try {
                 tela = new TelaDeJogo("", "");
                 tela.exibirTela();
             } catch (Exception e) {
-                System.out.println("Erro ao criar interface do jogador " + playerNumber + ": " + e.getMessage());
+                System.out.println("Erro na interface do jogador " + playerNumber + ": " + e.getMessage());
                 return;
             }
 
-            // Configuração de I/O
+            // 2. Set up I/O streams
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas para jogar.");
+            // 3. Send welcome message
+            output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas.");
             startTime = System.currentTimeMillis();
 
-            // Inicia temporizador (apenas para o primeiro jogador)
+            // 4. Start game timer (only for first player)
             if (playerNumber == 1) {
-                partida.setSockets(Collections.singletonList(clientSocket));  // Lista imutável com 1 socket
-                partida.iniciarTemporizador();  // Usar método da partida, não do GameServer
+                partida.setSockets(Collections.singletonList(clientSocket));
+                partida.iniciarTemporizador();
+
+                // Notify all players game has started
+                String startMsg = "PARTIDA_INICIADA|" + partida.getGameDuration();
+                partida.enviarParaTodos(startMsg);
             }
 
-            // Rodadas do jogo
+            // 5. Game rounds loop
             for (int i = 0; i < ROUNDS && !partida.estaEncerrada(); i++) {
                 String[] wordInfo = partida.getPalavraDaRodada(i);
                 String secretWord = wordInfo[0];
                 String hint = wordInfo[1];
 
-                // Atualiza interface e envia informações
+                // Update interface
                 tela.atualizarTela(secretWord, hint);
-                output.println("\nRodada " + (i + 1) + " de " + ROUNDS);
+                output.println("\nRodada " + (i + 1) + "/" + ROUNDS);
                 output.println("Dica: " + hint);
-                output.println("A palavra tem " + secretWord.length() + " letras.");
 
+                // 6. Word guessing loop
                 boolean acertou = false;
                 while (!acertou && !partida.estaEncerrada()) {
                     String guess = tela.getPalpite();
 
-                    // Verifica se o jogo foi encerrado durante a espera
-                    if (partida.estaEncerrada()) {
-                        break;
-                    }
-
-                    if (guess == null || guess.isEmpty()) {
-                        continue;
-                    }
+                    if (partida.estaEncerrada()) break;
+                    if (guess == null || guess.isEmpty()) continue;
 
                     guess = guess.trim().toUpperCase();
 
-                    // Verifica a adivinhação
                     if (guess.equals(secretWord)) {
                         score += 10;
-                        output.println("Parabéns, jogador " + playerNumber + "! Você acertou: " + secretWord);
-                        output.println("Pontuação: " + score);
+                        output.println("Acertou! +10 pontos (Total: " + score + ")");
                         acertou = true;
                     } else {
-                        output.println("Palavra errada. Tente novamente!");
+                        output.println("Errado! Tente novamente");
                     }
                 }
+
+                if (partida.estaEncerrada()) break;
             }
 
-            // Finalização
+            // 7. Game ending
             endTime = System.currentTimeMillis();
-            output.println("Sua pontuação final: " + score);
+            output.println("FIM DE JOGO! Pontuação: " + score);
 
-            // Registra no ranking
+            // Register score
             boolean ultimo = partida.registrarRanking(playerNumber, score, endTime - startTime);
-            System.out.println("Jogador " + playerNumber + " finalizou com " + score + " pontos");
 
-            // Se for o último jogador, envia ranking
+            // Send final ranking if last player
             if (ultimo) {
                 String ranking = partida.obterRankingFinal();
                 partida.enviarRankingParaTodos(ranking);
+                System.out.println("Ranking enviado para todos os jogadores");
             }
 
         } catch (IOException e) {
-            System.out.println("Erro na comunicação com jogador " + playerNumber + ": " + e.getMessage());
+            System.out.println("Erro com jogador " + playerNumber + ": " + e.getMessage());
         } finally {
+            // 8. Cleanup
             jogadorTerminou = true;
             partida.verificaTerminoJogo();
 
-            // Fecha recursos
             if (tela != null) {
                 tela.dispose();
             }
@@ -140,6 +139,15 @@ public class ClientHandler extends Thread {
 
     public boolean terminou() {
         return jogadorTerminou;
+    }
+
+    public void enviarMensagem(String mensagem) {
+        if (output != null) {
+            output.println(mensagem);  // Usa o PrintWriter já existente
+            output.flush();
+        } else {
+            System.err.println("Erro: output não inicializado para jogador " + playerNumber);
+        }
     }
 
 

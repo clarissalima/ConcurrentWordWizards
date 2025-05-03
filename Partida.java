@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.List;
 
 public class Partida {
-    private final int id;
+    final int id;
     final String modo;
     final int totalPlayers;
     final List<ClientHandler> clients = new ArrayList<>();
@@ -14,17 +14,28 @@ public class Partida {
     private int jogadoresFinalizados = 0;
     private boolean jogoEncerrado = false;
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private static int GAME_DURATION_SECONDS;
+    //private static int GAME_DURATION_SECONDS;
+    private int gameDuration;
+    private long startTime;
+    private List<Socket> sockets;
+
+    // Durações padrão para cada modo
+    public static final int FACIL_DURATION = 180;
+    public static final int MEDIO_DURATION = 120;
+    public static final int DIFICIL_DURATION = 60;
 
 
     public Partida(int id, String modo, int totalPlayers) {
         this.id = id;
-        this.modo = modo;
+        this.modo = modo.toLowerCase();
         this.totalPlayers = totalPlayers;
-        definirModoJogo(modo);
-        gerarPalavrasParaRodadas(modo);
+        //definirModoJogo(modo);
+        this.gameDuration = calcularDuracao(modo);
+        this.startTime = System.currentTimeMillis();
+        gerarPalavrasParaRodadas(this.modo);
     }
-    private List<Socket> sockets;
+
+    //private List<Socket> sockets;
 
     public void setSockets(List<Socket> sockets) {
         this.sockets = sockets;
@@ -33,35 +44,22 @@ public class Partida {
     public List<Socket> getSockets() {
         return sockets;
     }
-    // Métodos da partida (similar aos métodos estáticos que estavam em GameServer)
-    private static void definirModoJogo(String modo) {
-        switch (modo) {
-            case "fácil":
+
+    private int calcularDuracao(String modo) {
+        switch (modo.toLowerCase()) {
             case "facil":
-            case "Facil":
-            case "Fácil":
-                GAME_DURATION_SECONDS = 180;
-                break;
-
-            case "médio":
+                return FACIL_DURATION;
             case "medio":
-            case "Medio":
-            case "Médio":
-                GAME_DURATION_SECONDS = 120;
-                break;
-
-            case "difícil":
+                return MEDIO_DURATION;
             case "dificil":
-            case "Difícil":
-            case "Dificil":
-                GAME_DURATION_SECONDS = 60;
-                break;
-
+                return DIFICIL_DURATION;
             default:
-                System.out.println("Modo inválido! Definindo como Médio por padrão.");
-                GAME_DURATION_SECONDS = 120;
+                return MEDIO_DURATION;
         }
     }
+
+
+
 
     private void gerarPalavrasParaRodadas(String modo) {
         this.palavrasRodadas.clear();
@@ -102,9 +100,11 @@ public class Partida {
 
     public void iniciarTemporizador() {
         scheduler.schedule(() -> {
-            System.out.println("Tempo acabou! Encerrando a partida " + id);
-            encerrarJogo();
-        }, GAME_DURATION_SECONDS, TimeUnit.SECONDS);
+            if (!estaEncerrada()) {
+                System.out.println("Tempo esgotado! Encerrando partida " + id);
+                encerrarJogo();
+            }
+        }, gameDuration, TimeUnit.SECONDS);
     }
 
     private void encerrarJogo() {
@@ -151,9 +151,17 @@ public class Partida {
             throw new IllegalStateException("Partida já está cheia");
         }
         clients.add(client);
+
+        if (clients.size() == 1) { // Primeiro jogador
+            this.sockets = Collections.singletonList(client.clientSocket);
+            this.startTime = System.currentTimeMillis(); // Reinicia o timer quando o primeiro jogador entra
+        }
+
         GameServer.serverGUI.atualizarListaPartidas();
 
     }
+
+
 
     public boolean estaCheia() {
         return clients.size() >= totalPlayers;
@@ -205,9 +213,32 @@ public class Partida {
         }
     }
 
-    public static int getGameDuration() {
-        return GAME_DURATION_SECONDS;
+    public int getGameDuration() {
+        return this.gameDuration;
     }
+
+
+    public void enviarParaTodos(String mensagem) {
+        clients.forEach(client -> client.enviarMensagem(mensagem));
+    }
+
+
+    public String getInfoPartida() {
+        return String.format("Partida %d - %s (%d/%d) %02d:%02d",
+                id,
+                modo.toUpperCase(),
+                clients.size(),
+                totalPlayers,
+                getTempoRestante() / 60,
+                getTempoRestante() % 60);
+    }
+
+    // Na classe Partida
+    public int getTempoRestante() {
+        int decorrido = (int)((System.currentTimeMillis() - startTime) / 1000);
+        return Math.max(0, gameDuration - decorrido); // Nunca retorna negativo
+    }
+
 
 
 

@@ -28,9 +28,9 @@ public class CreateGamePanel extends JPanel {
         difficultyPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
         ButtonGroup difficultyGroup = new ButtonGroup();
-        JRadioButton easyButton = createRadioButton("Fácil", "facil");
-        JRadioButton mediumButton = createRadioButton("Médio", "medio");
-        JRadioButton hardButton = createRadioButton("Difícil", "dificil");
+        JRadioButton easyButton = createStyledRadioButton("Fácil", "facil");
+        JRadioButton mediumButton = createStyledRadioButton("Médio", "medio");
+        JRadioButton hardButton = createStyledRadioButton("Difícil", "dificil");
 
         difficultyGroup.add(easyButton);
         difficultyGroup.add(mediumButton);
@@ -52,24 +52,28 @@ public class CreateGamePanel extends JPanel {
 
         SpinnerModel spinnerModel = new SpinnerNumberModel(2, 2, 10, 1);
         JSpinner playersSpinner = new JSpinner(spinnerModel);
-        playersSpinner.setPreferredSize(new Dimension(60, 30));
+        playersSpinner.setPreferredSize(new Dimension(80, 35));
+        playersSpinner.setEditor(new JSpinner.NumberEditor(playersSpinner, "#"));
+        ((JSpinner.NumberEditor)playersSpinner.getEditor()).getTextField().setFont(new Font("Arial", Font.BOLD, 16));
 
         playersPanel.add(playersLabel);
+        playersPanel.add(Box.createRigidArea(new Dimension(15, 0)));
         playersPanel.add(playersSpinner);
 
         // Botões
-        JButton startButton = new JButton("Iniciar Partida");
-        JButton backButton = new JButton("Voltar ao Menu");
+        JButton startButton = createStyledButton("Iniciar Partida", new Color(144, 238, 144));
+        JButton backButton = createStyledButton("Voltar ao Menu", new Color(255, 182, 193));
 
         // Layout
         add(Box.createVerticalGlue());
         add(titleLabel);
         add(Box.createRigidArea(new Dimension(0, 30)));
         add(difficultyPanel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(playersPanel);
-        add(Box.createRigidArea(new Dimension(0, 30)));
+        add(Box.createRigidArea(new Dimension(0, 40)));
         add(startButton);
-        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(Box.createRigidArea(new Dimension(0, 15)));
         add(backButton);
         add(Box.createVerticalGlue());
 
@@ -83,20 +87,57 @@ public class CreateGamePanel extends JPanel {
             try {
                 gui.createNewGame(difficulty, players);
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                JOptionPane.showMessageDialog(this,
+                        "Erro ao criar partida: " + ex.getMessage(),
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
         backButton.addActionListener(e -> gui.showMainMenu());
     }
 
-    private JRadioButton createRadioButton(String text, String actionCommand) {
+    private JRadioButton createStyledRadioButton(String text, String actionCommand) {
         JRadioButton button = new JRadioButton(text);
         button.setActionCommand(actionCommand);
-        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setForeground(Color.WHITE);
         button.setOpaque(false);
         button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Ícone personalizado para radio buttons
+        button.setIcon(new ImageIcon(getClass().getResource("/radio_unselected.png"))); // Substitua pelo seu ícone
+        button.setSelectedIcon(new ImageIcon(getClass().getResource("/radio_selected.png"))); // Substitua pelo seu ícone
+
+        return button;
+    }
+
+    private JButton createStyledButton(String text, Color bgColor) {
+        JButton button = new JButton(text);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setPreferredSize(new Dimension(250, 45));
+        button.setMaximumSize(new Dimension(250, 45));
+        button.setFont(new Font("Arial", Font.BOLD, 18));
+        button.setBackground(bgColor);
+        button.setForeground(Color.DARK_GRAY);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createEmptyBorder(5, 25, 5, 25)
+        ));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                button.setBackground(bgColor.brighter());
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                button.setBackground(bgColor);
+            }
+        });
+
         return button;
     }
 
