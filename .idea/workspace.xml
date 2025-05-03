@@ -7,9 +7,9 @@
     <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" afterDir="false" />
     </list>
@@ -65,7 +65,7 @@
     "Application.GameServer.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "clari",
+    "git-widget-placeholder": "claraa",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/clari/ConcurrentWordWizards",

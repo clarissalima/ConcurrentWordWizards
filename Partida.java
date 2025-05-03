@@ -1,4 +1,4 @@
-import java.io.IOException;
+import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.net.Socket;
@@ -81,14 +81,22 @@ public class Partida {
         return palavrasRodadas.get(rodada);
     }
 
-    public synchronized void registrarRanking(int playerNumber, int score, long tempoTotal) {
-        ranking.add(new RankingJogador(playerNumber, score, tempoTotal));
+    public synchronized boolean registrarRanking(int playerNumber, int score, long tempoTotal) {
+        // Criação de um novo objeto de RankingJogador para cada jogador
+        RankingJogador rankingJogador = new RankingJogador(playerNumber, score, tempoTotal);
+        ranking.add(rankingJogador);
+
+        if (clients.size() == totalPlayers) {
+            // Verificar se é o último jogador, se sim, encerra a partida e envia o ranking
+            return playerNumber == totalPlayers;  // RETORNA TRUE APENAS PARA O ÚLTIMO JOGADOR
+        }
+        return false;
     }
 
     public synchronized void verificaTerminoJogo() {
-        jogadoresFinalizados++;
-        if (jogadoresFinalizados == totalPlayers) {
-            encerrarJogo();
+        if (clients.stream().allMatch(ClientHandler::terminou)) {
+            jogoEncerrado = true; // Corrigido: O nome da variável era `encerrado` e estava errado.
+            System.out.println("A partida " + id + " foi encerrada!");
         }
     }
 
@@ -111,7 +119,7 @@ public class Partida {
             client.encerrar();
         }
 
-        RankingPanel.mostrarRanking(ranking);
+        SwingUtilities.invokeLater(() -> RankingPanel.mostrarRanking(ranking));
         scheduler.shutdown();
     }
 
@@ -150,8 +158,37 @@ public class Partida {
         return jogoEncerrado;
     }
 
+    public synchronized String obterRankingFinal() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n ---------------- Ranking Final ---------------\n");
+
+        if (ranking.isEmpty()) {
+            sb.append("Nenhum jogador terminou a tempo.\n");
+            return sb.toString();
+        }
+
+        ranking.sort(Comparator
+                .comparingInt((RankingJogador r) -> r.score).reversed() // primeiro ordena pela pontuação
+                .thenComparingLong(r -> r.tempo)); //ordena pelo tempo
+
+        // ranking dos tres melhores
+        for (int i = 0; i < Math.min(3, ranking.size()); i++) {
+            RankingJogador r = ranking.get(i);
+            sb.append(String.format("%dº lugar - Jogador %d | Pontos: %d | Tempo: %.2f segundos\n",
+                    i + 1, r.playerNumber, r.score, r.tempo / 1000.0));
+        }
+
+        return sb.toString();
+    }
+
+    public void enviarRankingParaTodos(String rankingFinal) {
+        for (ClientHandler client : clients) {
+            client.enviarRanking(rankingFinal);
+        }
+    }
+
     // Classe RankingJogador pode ficar aqui como inner class
-    static class RankingJogador{
+    static class RankingJogador {
         int playerNumber;
         int score;
         long tempo;

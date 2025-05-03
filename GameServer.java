@@ -175,12 +175,17 @@ public class GameServer {
                     } else if (i == 0) {
                         msg = "Tempo esgotado! A partida será encerrada.";
                     } else {
+                        Thread.sleep(1000);
                         continue;
                     }
 
                     for (Socket socket : jogadores) {
-                        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        out.println(msg);
+                        try {
+                            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                            out.println(msg);
+                        } catch (IOException e) {
+                            System.out.println("Erro ao enviar cronômetro para jogador: " + e.getMessage());
+                        }
                     }
 
                     System.out.println("[Servidor] " + msg);
