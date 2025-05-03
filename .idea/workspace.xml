@@ -6,17 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CreateGamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/CreateGamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ServerGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/ServerGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" afterDir="false" />
     </list>
@@ -226,10 +218,16 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
+        <line-breakpoint enabled="true" type="java-field">
+          <url>file://$PROJECT_DIR$/ServerGUI.java</url>
+          <line>9</line>
+          <properties field="partidas" class="ServerGUI" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ServerGUI.java</url>
-          <line>164</line>
-          <option name="timeStamp" value="1" />
+          <line>13</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
