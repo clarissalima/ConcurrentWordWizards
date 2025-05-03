@@ -5,33 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CreateGamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/CreateGamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ServerGUI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameCreatedPanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GamesListPanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PalavrasDoJogo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/RankingPanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +56,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.GameClient.executor": "Run",
-    "Application.GameServer.executor": "Debug",
+    "Application.GameServer.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "clari",

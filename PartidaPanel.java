@@ -40,7 +40,7 @@ public class PartidaPanel extends JPanel {
         // Timer panel
         JPanel timerPanel = new JPanel();
         timerPanel.setOpaque(false);
-        tempoLabel = new JLabel("00:00", SwingConstants.CENTER);
+        tempoLabel = new JLabel(formatarTempo(partida.getTempoRestante()), SwingConstants.CENTER);
         tempoLabel.setFont(new Font("Arial", Font.BOLD, 72));
         tempoLabel.setForeground(Color.WHITE);
         timerPanel.add(tempoLabel);
@@ -60,14 +60,22 @@ public class PartidaPanel extends JPanel {
         add(footerPanel, BorderLayout.SOUTH);
     }
 
+    private String formatarTempo(int segundos) {
+        int minutos = segundos / 60;
+        int segs = segundos % 60;
+        return String.format("%02d:%02d", minutos, segs);
+    }
+
     private void startTimer() {
+        // Mostra o tempo atual imediatamente
+        atualizarTempo(partida.getTempoRestante());
+
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int segundosRestantes = partida.getTempoRestante();
                 atualizarTempo(segundosRestantes);
 
-                // Mudança de cor quando o tempo está acabando
                 if (segundosRestantes <= 30) {
                     tempoLabel.setForeground(new Color(255, 100, 100));
                 }
