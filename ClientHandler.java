@@ -4,6 +4,8 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.System.in;
+
 // Essa classe trata cada cliente que se conecta ao servidor
 public class ClientHandler extends Thread {
     final Socket clientSocket;
@@ -16,6 +18,7 @@ public class ClientHandler extends Thread {
     final int playerNumber;
     private final Partida partida;
     private boolean jogadorTerminou = false;
+    private String nomeJogador;
 
     public ClientHandler(Socket socket, int playerNumber, Partida partida) {
         this.clientSocket = socket;
@@ -25,19 +28,41 @@ public class ClientHandler extends Thread {
         partida.setSockets(listaDeSockets);
     }
 
+    public String getNomeJogador() {
+        return nomeJogador;
+    }
+
 
     @Override
     public void run() {
         jogadorTerminou = false;
         TelaDeJogo tela = null;
 
+//        nomeJogador = in.readLine(); // Cliente envia o nome primeiro
+//        System.out.println("Jogador conectado: " + nomeJogador);
+
+
+
+
         try {
             // 1. Initialize game interface
             try {
+
+                input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                output = new PrintWriter(clientSocket.getOutputStream(), true);
+
+                output.println("DIGITE_SEU_NOME");
+                nomeJogador = input.readLine();
+                if (nomeJogador == null || nomeJogador.trim().isEmpty()) {
+                    nomeJogador = "Jogador" + playerNumber;
+                }
+                System.out.println("Jogador conectado: " + nomeJogador);
+
+
                 tela = new TelaDeJogo("", "");
                 tela.exibirTela();
             } catch (Exception e) {
-                System.out.println("Erro na interface do jogador " + playerNumber + ": " + e.getMessage());
+                System.out.println("Erro na interface do jogador " + nomeJogador + ": " + e.getMessage());
                 return;
             }
 
@@ -46,7 +71,7 @@ public class ClientHandler extends Thread {
             output = new PrintWriter(clientSocket.getOutputStream(), true);
 
             // 3. Send welcome message
-            output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas.");
+            output.println(nomeJogador + ", bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas.");
             startTime = System.currentTimeMillis();
 
             // 4. Start game timer (only for first player)
@@ -107,7 +132,7 @@ public class ClientHandler extends Thread {
             }
 
         } catch (IOException e) {
-            System.out.println("Erro com jogador " + playerNumber + ": " + e.getMessage());
+            System.out.println("Erro com jogador " + nomeJogador + ": " + e.getMessage());
         } finally {
             // 8. Cleanup
             jogadorTerminou = true;
@@ -133,7 +158,7 @@ public class ClientHandler extends Thread {
             }
             clientSocket.close();
         } catch (IOException e) {
-            System.out.println("Erro ao encerrar conexão com o jogador " + playerNumber);
+            System.out.println("Erro ao encerrar conexão com o jogador " + nomeJogador);
         }
     }
 
@@ -146,7 +171,7 @@ public class ClientHandler extends Thread {
             output.println(mensagem);  // Usa o PrintWriter já existente
             output.flush();
         } else {
-            System.err.println("Erro: output não inicializado para jogador " + playerNumber);
+            System.err.println("Erro: output não inicializado para jogador " + nomeJogador);
         }
     }
 

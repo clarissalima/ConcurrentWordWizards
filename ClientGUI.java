@@ -98,12 +98,52 @@ public class ClientGUI {
         gamesPanel.setLayout(new BoxLayout(gamesPanel, BoxLayout.Y_AXIS));
         gamesPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
 
-        // Aqui você precisará receber a lista de partidas do servidor
-        // Esta é uma implementação simulada - você precisará adaptar para sua comunicação real
-        gamesPanel.add(new JLabel("Carregando partidas disponíveis..."));
+        // Solicitar lista de partidas ao servidor
+        out.println("LISTAR_PARTIDAS");
+
+        try {
+            String response;
+            while ((response = in.readLine()) != null && !response.equals("FIM_LISTA")) {
+                if (response.startsWith("PARTIDA:")) {
+                    String[] parts = response.split("\\|");
+
+                    if (parts.length == 4) {
+                        try {
+                            int id = Integer.parseInt(response.substring(8, response.indexOf('|')));
+                            String modo = parts[1];
+                            int jogadoresAtuais = Integer.parseInt(parts[2]);
+                            int totalJogadores = Integer.parseInt(parts[3]);
+
+                            JButton gameButton = createStyledButton(
+                                    String.format("Partida %d - %s (%d/%d)", id, modo, jogadoresAtuais, totalJogadores),
+                                    new Color(180, 130, 255)
+                            );
+
+                            gameButton.addActionListener(e -> {
+                                out.println("ENTRAR_PARTIDA|" + id);
+                                showWaitingScreen(id);
+                            });
+
+                            gamesPanel.add(gameButton);
+                            gamesPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        } catch (NumberFormatException e) {
+                            System.err.println("Erro ao converter dados da partida: " + response);
+                        }
+                    } else {
+                        System.err.println("Resposta malformada: " + response);
+                    }
+                }
+
+
+
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(frame, "Erro ao carregar partidas: " + ex.getMessage(),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
 
         JButton refreshButton = createStyledButton("Atualizar Lista", new Color(200, 150, 255));
-        refreshButton.addActionListener(e -> updateGamesList(gamesPanel));
+        refreshButton.addActionListener(e -> showGameSelectionScreen());
 
         panel.add(Box.createVerticalGlue());
         panel.add(titleLabel);
@@ -116,6 +156,103 @@ public class ClientGUI {
         scrollPane.setViewportView(gamesPanel);
         frame.setContentPane(panel);
         frame.revalidate();
+    }
+
+    private void showWaitingScreen(int gameId) {
+        JPanel panel = new GradientPanel(new Color(150, 100, 255), new Color(100, 50, 200));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+
+        JLabel titleLabel = new JLabel("Aguardando Jogadores");
+        titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 28));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setForeground(Color.WHITE);
+
+        JLabel messageLabel = new JLabel(playerName + ", aguarde mais jogadores para a partida " + gameId);
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        messageLabel.setForeground(Color.WHITE);
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(titleLabel);
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(messageLabel);
+        panel.add(Box.createVerticalGlue());
+
+        frame.setContentPane(panel);
+        frame.revalidate();
+
+        new Thread(() -> {
+            try {
+                String response;
+                while ((response = in.readLine()) != null) {
+                    if (response.equals("PARTIDA_INICIADA")) {
+                        showGameScreen();
+                        break;
+                    } else if (response.startsWith("ERRO:")) {
+                        JOptionPane.showMessageDialog(frame, response.substring(5),
+                                "Erro", JOptionPane.ERROR_MESSAGE);
+                        showGameSelectionScreen();
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void showGameScreen() {
+        JPanel panel = new GradientPanel(new Color(150, 100, 255), new Color(100, 50, 200));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel dicaLabel = new JLabel("Dica: ");
+        dicaLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        dicaLabel.setForeground(Color.WHITE);
+
+        JTextField guessField = new JTextField();
+        guessField.setMaximumSize(new Dimension(300, 30));
+
+        JButton submitButton = createStyledButton("Enviar Palpite", new Color(200, 150, 255));
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(dicaLabel);
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(guessField);
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(submitButton);
+        panel.add(Box.createVerticalGlue());
+
+        frame.setContentPane(panel);
+        frame.revalidate();
+
+        // Thread para receber atualizações do servidor
+        new Thread(() -> {
+            try {
+                String response;
+                while ((response = in.readLine()) != null) {
+                    if (response.startsWith("DICA:")) {
+                        String dica = response.substring(5);
+                        SwingUtilities.invokeLater(() -> dicaLabel.setText("Dica: " + dica));
+                    } else if (response.startsWith("RESULTADO:")) {
+                        String resultado = response.substring(10);
+                        JOptionPane.showMessageDialog(frame, resultado,
+                                "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }).start();
+
+        submitButton.addActionListener(e -> {
+            String palpite = guessField.getText().trim();
+            if (!palpite.isEmpty()) {
+                out.println(palpite);
+                guessField.setText("");
+            }
+        });
     }
 
     private void updateGamesList(JPanel gamesPanel) {
