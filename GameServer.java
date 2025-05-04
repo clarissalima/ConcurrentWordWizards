@@ -74,7 +74,13 @@ public class GameServer {
             output.println("FIM_LISTA");
 
         try {
-            String resposta = "";
+            String resposta = input.readLine();
+            if (resposta == null || !resposta.startsWith("ENTRAR_PARTIDA|")) {
+                output.println("Comando inválido.");
+                clientSocket.close();
+                return;
+            }
+
             int partidaId = Integer.parseInt(resposta.split("\\|")[1]);
             Partida partida = partidas.get(partidaId);
 
@@ -98,16 +104,15 @@ public class GameServer {
 
             output.println("Você entrou na partida " + partidaId + " como " + playerName);
 
+            clientHandler.start(); // Sempre inicia o thread logo após adicionar o jogador
+
             if (partida.estaCheia()) {
                 System.out.println("Partida " + partidaId + " iniciando com " + partida.totalPlayers + " jogadores!");
-                partida.iniciarTemporizador();
                 notificarInicioPartida(partidaId);
-                for (ClientHandler client : partida.clients) {
-                    client.start();
-                }
             } else {
                 output.println("Aguardando mais jogadores... (" + partida.clients.size() + "/" + partida.totalPlayers + ")");
             }
+
 
         } catch (NumberFormatException e) {
             output.println("Entrada inválida.");

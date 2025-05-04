@@ -124,10 +124,23 @@ public class Partida {
         if (clients.size() == 1) { // Primeiro jogador
             this.sockets = Collections.singletonList(client.clientSocket);
             this.startTime = System.currentTimeMillis();
+
+            if (clients.size() == totalPlayers) {
+                iniciarPartida();
+            }
         }
 
         ServerGUI.atualizarListaPartidas();
     }
+
+    public synchronized void iniciarPartida() {
+        if (!jogoEncerrado) {
+            iniciarTemporizador();
+            enviarParaTodos("PARTIDA_INICIADA|" + gameDuration);
+            System.out.println("Partida " + id + " iniciada com " + clients.size() + " jogador(es).");
+        }
+    }
+
 
     public boolean estaCheia() {
         return clients.size() >= totalPlayers;
