@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TelaDeJogo.java" beforeDir="false" afterPath="$PROJECT_DIR$/TelaDeJogo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer$ServerGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer$ServerGUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +92,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GameServer">
+  <component name="RunManager" selected="Application.GameClient">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />

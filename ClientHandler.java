@@ -16,6 +16,7 @@ public class ClientHandler extends Thread {
     final int playerNumber;
     private final Partida partida;
     private boolean jogadorTerminou = false;
+    private TelaDeJogo tela;
 
     public ClientHandler(Socket socket, int playerNumber, Partida partida) {
         this.clientSocket = socket;
@@ -29,12 +30,12 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         jogadorTerminou = false;
-        TelaDeJogo tela = null;
+        tela = null;
 
         try {
             // 1. Initialize game interface
             try {
-                tela = new TelaDeJogo("", "");
+                tela = new TelaDeJogo("", "", playerNumber);
                 tela.exibirTela();
             } catch (Exception e) {
                 System.out.println("Erro na interface do jogador " + playerNumber + ": " + e.getMessage());
@@ -66,7 +67,7 @@ public class ClientHandler extends Thread {
                 String hint = wordInfo[1];
 
                 // Update interface
-                tela.atualizarTela(secretWord, hint);
+                tela.atualizarTela(secretWord, hint, playerNumber);
                 output.println("\nRodada " + (i + 1) + "/" + ROUNDS);
                 output.println("Dica: " + hint);
 
@@ -75,7 +76,7 @@ public class ClientHandler extends Thread {
                 while (!acertou && !partida.estaEncerrada()) {
                     String guess = tela.getPalpite();
 
-                    if (partida.estaEncerrada()) break;
+
                     if (guess == null || guess.isEmpty()) continue;
 
                     guess = guess.trim().toUpperCase();
@@ -89,7 +90,10 @@ public class ClientHandler extends Thread {
                     }
                 }
 
-                if (partida.estaEncerrada()) break;
+//                if (partida.estaEncerrada()) {
+//                    Thread.currentThread().interrupt(); // Força sair do loop
+//                    break;
+//                }
             }
 
             // 7. Game ending
@@ -101,22 +105,26 @@ public class ClientHandler extends Thread {
 
             // Send final ranking if last player
             if (ultimo) {
+
                 String ranking = partida.obterRankingFinal();
                 partida.enviarRankingParaTodos(ranking);
-                System.out.println("Ranking enviado para todos os jogadores");
+                System.out.println("Ranking enviado para todos os jogadoresSS");
+                partida.encerrarJogo();
+
             }
 
         } catch (IOException e) {
             System.out.println("Erro com jogador " + playerNumber + ": " + e.getMessage());
         } finally {
-            // 8. Cleanup
-            jogadorTerminou = true;
-            partida.verificaTerminoJogo();
 
-            if (tela != null) {
-                tela.dispose();
+            if (partida.estaEncerrada()) {
+                System.out.println("[DEBUG] Entrou no finally - Jogador " + playerNumber);
+                jogadorTerminou = true;
+                partida.verificaTerminoJogo();
+                partida.encerrarJogo();
+                encerrar();
             }
-            encerrar();
+
         }
     }
 
@@ -124,6 +132,10 @@ public class ClientHandler extends Thread {
         if (output != null) {
             output.println(rankingFinal);
         }
+    }
+
+    public void exibirResultado(String rankingFinal) {
+        tela.exibirResultado(rankingFinal);
     }
 
     public void encerrar() {

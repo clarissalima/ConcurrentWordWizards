@@ -22,7 +22,7 @@ public class Partida {
     // Durações padrão para cada modo
     public static final int FACIL_DURATION = 180;
     public static final int MEDIO_DURATION = 120;
-    public static final int DIFICIL_DURATION = 60;
+    public static final int DIFICIL_DURATION = 20;
 
 
     public Partida(int id, String modo, int totalPlayers) {
@@ -107,15 +107,17 @@ public class Partida {
         }, gameDuration, TimeUnit.SECONDS);
     }
 
-    private void encerrarJogo() {
+    public void encerrarJogo() {
         if (jogoEncerrado) return;
         jogoEncerrado = true;
 
         String rankingFinal = getRankingFinal();
+        String rankingFinalComplete = "Partida " + id + " - Ranking Final:\n" + rankingFinal;
         System.out.println("Partida " + id + " - Ranking Final:\n" + rankingFinal);
 
         for (ClientHandler client : clients) {
             client.enviarRanking(rankingFinal);
+            client.exibirResultado(rankingFinalComplete);
             client.encerrar();
         }
 
@@ -171,9 +173,10 @@ public class Partida {
         return jogoEncerrado;
     }
 
+    //acho que esse metodo nao ta sendo usado e ta duplicado em getrankingfinal
     public synchronized String obterRankingFinal() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n ---------------- Ranking Final ---------------\n");
+        sb.append("\n ---------------- Ranking Final ----obter-----------\n");
 
         if (ranking.isEmpty()) {
             sb.append("Nenhum jogador terminou a tempo.\n");

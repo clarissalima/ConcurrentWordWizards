@@ -44,7 +44,7 @@ public class GameServer {
 
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Servidor iniciado na porta: " + PORT);
+            System.out.println("Servidor iniciado na portaAA: " + PORT);
 
             // Aceitar conexões de clientes
             while (true) {
