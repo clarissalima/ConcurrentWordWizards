@@ -25,7 +25,7 @@ public class GameServer {
         GameServer.serverGUI = gui;
     }
 
-    public ConcurrentHashMap<Integer, Partida> getPartidas() {
+    public static ConcurrentHashMap<Integer, Partida> getPartidas() {
         return partidas;
     }
 
@@ -35,7 +35,7 @@ public class GameServer {
     }
 
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
 
         GameServer server = new GameServer();
 
@@ -228,7 +228,7 @@ public class GameServer {
         }).start();
     }
 
-    public class ServerGUI {
+    public static class ServerGUI {
         private JFrame frame;
         private static JPanel currentPanel;
         private ConcurrentHashMap<Integer, Partida> partidas;
