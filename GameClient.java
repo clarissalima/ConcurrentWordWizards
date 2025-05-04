@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -15,6 +16,11 @@ public class GameClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(in);
         System.out.println("Iniciando cliente...");
+
+
+        SwingUtilities.invokeLater(() -> {
+            new ClientGUI(SERVER_ADDRESS, SERVER_PORT);
+        });
 
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
              BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
