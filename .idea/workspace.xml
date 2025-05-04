@@ -5,16 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClientGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ServerGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/ServerGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$GradientPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$GradientPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameCreatedPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameCreatedPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GamesListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GamesListPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PalavrasDoJogo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PalavrasDoJogo.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/RankingPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/RankingPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GamesListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GamesListPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,41 +76,71 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2vN5gKgSSc5X0bM8EX3J13S6OqB" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.GameClient.executor": "Run",
-    "Application.GameServer.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "clari",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/clari/ConcurrentWordWizards",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.file-colors",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.GameClient.executor&quot;: &quot;Run&quot;,
+    &quot;Application.GameServer.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;claraa&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/clari/ConcurrentWordWizards&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.file-colors&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveInnerDialog.RECENTS_KEY">
       <recent name="" />
     </key>
   </component>
   <component name="RunManager" selected="Application.GameClient">
+    <configuration default="true" type="Python.FlaskServer">
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GameServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="GameServer" />
+      <module name="ConcurrentWordWizards" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -113,20 +164,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="Python.FlaskServer">
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -137,22 +174,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <method v="2" />
-    </configuration>
-    <configuration name="GameServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="GameServer" />
-      <module name="ConcurrentWordWizards" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
       <method v="2" />
     </configuration>
     <recent_temporary>

@@ -4,13 +4,15 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientGUI {
     private static JFrame frame;
     private Socket socket;
     private PrintWriter out;
-    private BufferedReader in;
-    private static String playerName;
+    private static BufferedReader in;
+    static String playerName;
     private String serverAddress;
     private int serverPort;
 
@@ -47,6 +49,7 @@ public class ClientGUI {
         JButton submitButton = createStyledButton("Continuar", new Color(200, 150, 255));
         submitButton.addActionListener(e -> {
             playerName = nameField.getText().trim();
+            System.out.println(playerName+" do client gui");
             if (!playerName.isEmpty()) {
                 connectToServer();
             }
@@ -100,6 +103,7 @@ public class ClientGUI {
 
         // Solicitar lista de partidas ao servidor
         out.println("LISTAR_PARTIDAS");
+        System.out.println("listar partIidas");
 
         try {
             String response;
@@ -182,11 +186,13 @@ public class ClientGUI {
         frame.setContentPane(panel);
         frame.revalidate();
 
-        new Thread(() -> {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
             try {
                 String response;
                 while ((response = in.readLine()) != null) {
                     if (response.equals("PARTIDA_INICIADA")) {
+                        System.out.println("eeedeveria ra aq ja");
                         showGameScreen();
                         break;
                     } else if (response.startsWith("ERRO:")) {
@@ -198,8 +204,11 @@ public class ClientGUI {
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(frame, "Erro na comunicação com o servidor.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+                showGameSelectionScreen();
             }
-        }).start();
+        });
     }
 
     private void showGameScreen() {
@@ -335,9 +344,18 @@ public class ClientGUI {
             // Thread para verificar quando a partida começar
             new Thread(() -> {
                 try {
-                    // Implemente a lógica para verificar quando a partida começa
-                    // Quando começar, chame showGameScreen()
+                    // Simula uma espera, como se fosse aguardando o servidor
+                    while (true) {
+                        String response = in.readLine();
+                        System.out.println(response+"responnnnnseeee");
+                        if ("PARTIDA_INICIADA".equals(response)) {
+                            ClientGUI gui = null;
+                            SwingUtilities.invokeLater(() -> gui.showGameScreen());
+                            break;
+                        }
+                    }
                 } catch (Exception e) {
+
                     e.printStackTrace();
                 }
             }).start();
