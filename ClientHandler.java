@@ -39,6 +39,7 @@ public class ClientHandler extends Thread {
             // 2. Recebe nome do jogador
             output.println("DIGITE_SEU_NOME");
             nomeJogador = input.readLine();
+
             if (nomeJogador == null || nomeJogador.trim().isEmpty()) {
                 nomeJogador = "Jogador" + playerNumber;
             }
@@ -130,11 +131,16 @@ public class ClientHandler extends Thread {
         return jogadorTerminou;
     }
 
+    int cout = 0;
     public void enviarMensagem(String mensagem) {
+        cout ++;
+        System.out.println(cout+ "contadorrrr");
+        if (output == null){System.out.println(output + " outpuuuut");}
         if (output != null) {
+            System.out.println("mensagem "+ mensagem);
             output.println(mensagem);
             output.flush();
-        } else {
+        }else {
             System.err.println("Erro: output não inicializado para jogador " + nomeJogador);
         }
     }

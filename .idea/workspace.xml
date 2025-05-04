@@ -8,34 +8,16 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClientGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$GradientPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI$GradientPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientGUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ClientHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/CreateGamePanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameCreatedPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameCreatedPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GamesListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GamesListPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/MainMenuPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PalavrasDoJogo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PalavrasDoJogo.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida$RankingJogador.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/Partida.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/PartidaPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/RankingPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/RankingPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GamesListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GamesListPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI$GradientPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/ServerGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +205,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744065500540</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="atualizar lista funcionando">
+      <option name="closed" value="true" />
+      <created>1746385467178</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746385467178</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,6 +233,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="new branch" />
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="atualizar lista funcionando" />
+    <option name="LAST_COMMIT_MESSAGE" value="atualizar lista funcionando" />
   </component>
 </project>

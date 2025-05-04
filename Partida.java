@@ -136,7 +136,7 @@ public class Partida {
     public synchronized void iniciarPartida() {
         if (!jogoEncerrado) {
             iniciarTemporizador();
-            enviarParaTodos("PARTIDA_INICIADA|" + gameDuration);
+            //enviarParaTodos("PARTIDA_INICIADA|" + gameDuration);
             System.out.println("Partida " + id + " iniciada com " + clients.size() + " jogador(es).");
         }
     }
@@ -179,6 +179,7 @@ public class Partida {
     }
 
     public void enviarParaTodos(String mensagem) {
+        System.out.println("entrou em enviar para todos");
         clients.forEach(client -> client.enviarMensagem(mensagem));
     }
 

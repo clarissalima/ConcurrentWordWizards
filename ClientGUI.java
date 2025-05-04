@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 public class ClientGUI {
     private static JFrame frame;
     private Socket socket;
-    private PrintWriter out;
+    private static PrintWriter out;
     private static BufferedReader in;
     static String playerName;
     private String serverAddress;
@@ -52,6 +52,7 @@ public class ClientGUI {
             System.out.println(playerName+" do client gui");
             if (!playerName.isEmpty()) {
                 connectToServer();
+                System.out.println("player name nn é empty");
             }
         });
 
@@ -76,6 +77,7 @@ public class ClientGUI {
 
             // Envia o nome do jogador primeiro
             out.println(playerName);
+            System.out.println(playerName + " player name no connect to server");
 
             showGameSelectionScreen();
         } catch (IOException e) {
@@ -191,8 +193,8 @@ public class ClientGUI {
             try {
                 String response;
                 while ((response = in.readLine()) != null) {
-                    if (response.equals("PARTIDA_INICIADA")) {
-                        System.out.println("eeedeveria ra aq ja");
+                    if (response.startsWith("PARTIDA_INICIADA")) {
+                        System.out.println("deveria ta aq ja");
                         showGameScreen();
                         break;
                     } else if (response.startsWith("ERRO:")) {
@@ -211,7 +213,7 @@ public class ClientGUI {
         });
     }
 
-    private void showGameScreen() {
+    public static void showGameScreen() {
         JPanel panel = new GradientPanel(new Color(150, 100, 255), new Color(100, 50, 200));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -271,7 +273,7 @@ public class ClientGUI {
         gamesPanel.repaint();
     }
 
-    private JButton createStyledButton(String text, Color bgColor) {
+    private static JButton createStyledButton(String text, Color bgColor) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setPreferredSize(new Dimension(200, 45));
@@ -317,48 +319,5 @@ public class ClientGUI {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        private void showWaitingScreen(String gameName) {
-            JPanel panel = new GradientPanel(new Color(150, 100, 255), new Color(100, 50, 200));
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-            panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
-
-            JLabel titleLabel = new JLabel("Aguardando Jogadores");
-            titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 28));
-            titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            titleLabel.setForeground(Color.WHITE);
-
-            JLabel messageLabel = new JLabel(playerName + ", aguarde mais jogadores para " + gameName);
-            messageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-            messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            messageLabel.setForeground(Color.WHITE);
-
-            panel.add(Box.createVerticalGlue());
-            panel.add(titleLabel);
-            panel.add(Box.createRigidArea(new Dimension(0, 20)));
-            panel.add(messageLabel);
-            panel.add(Box.createVerticalGlue());
-
-            frame.setContentPane(panel);
-            frame.revalidate();
-
-            // Thread para verificar quando a partida começar
-            new Thread(() -> {
-                try {
-                    // Simula uma espera, como se fosse aguardando o servidor
-                    while (true) {
-                        String response = in.readLine();
-                        System.out.println(response+"responnnnnseeee");
-                        if ("PARTIDA_INICIADA".equals(response)) {
-                            ClientGUI gui = null;
-                            SwingUtilities.invokeLater(() -> gui.showGameScreen());
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-            }).start();
         }
-    }
 }

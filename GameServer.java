@@ -59,13 +59,17 @@ public class GameServer {
             PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true);
 
             // 1. Solicitar nome do jogador
-//            output.println("DIGITE_SEU_NOME");
-//            String playerName = input.readLine();
-//            System.out.println(playerName+ " do gameserver");
-
+            output.println("DIGITE_SEU_NOME");
+            String playerName = input.readLine();
+            System.out.println(playerName+ " fo game serverrr");
+            if (playerName == null || playerName.trim().isEmpty()) {
+                output.println("NOME_INVALIDO");
+            }
 
             String comando;
             while ((comando = input.readLine()) != null) {
+                System.out.println("entrou");
+                System.out.println(comando + " comandoo");
                 if (comando.equals("LISTAR_PARTIDAS")) {
                     output.println("LISTA_PARTIDAS");
                     partidas.entrySet().stream()
@@ -77,6 +81,7 @@ public class GameServer {
                             });
                     output.println("FIM_LISTA");
                 } else if (comando.startsWith("ENTRAR_PARTIDA|")) {
+                    System.out.println("entrou no outro if");
                     try {
                         int partidaId = Integer.parseInt(comando.split("\\|")[1]);
                         Partida partida = partidas.get(partidaId);
@@ -99,14 +104,18 @@ public class GameServer {
                         partida.adicionarJogador(clientHandler);
                         //partida.adicionarJogador(clientHandler);
                         ServerGUI.atualizarListaPartidas();
+                        System.out.println(playerNumber + " numero do jogador");
 
-                        output.println("Você entrou na partida " + partidaId + " como " + ClientGUI.playerName);
+                        output.println("Você entrou na partida " + partidaId + " como " + playerName);
+
+                        System.out.println(playerName+" playeer namee dentro de ifs la ");
 
                         clientHandler.start();
 
                         if (partida.estaCheia()) {
                             System.out.println("Partida " + partidaId + " iniciando com " + partida.totalPlayers + " jogadores!");
-                            //notificarInicioPartida(partidaId);
+                            System.out.println(partidaId+" partida id");
+                            notificarInicioPartida(partidaId); // tirar
                         } else {
                             output.println("Aguardando mais jogadores... (" + partida.clients.size() + "/" + partida.totalPlayers + ")");
                         }
@@ -137,8 +146,10 @@ public class GameServer {
         System.out.println("Inicio da paratida");
         Partida partida = partidas.get(partidaId);
         if (partida != null && serverGUI != null) {
+            System.out.println("entrou em notificarinicio partida");
             String mensagem = "PARTIDA_INICIADA|" + partida.getGameDuration();
             partida.enviarParaTodos(mensagem);
+            System.out.println("passou do enviar p todos");
             serverGUI.atualizarParaTelaDePartida(partidaId);
         }
     }
