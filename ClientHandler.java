@@ -118,7 +118,6 @@ public class ClientHandler extends Thread {
         } finally {
 
             if (partida.estaEncerrada()) {
-                System.out.println("[DEBUG] Entrou no finally - Jogador " + playerNumber);
                 jogadorTerminou = true;
                 partida.verificaTerminoJogo();
                 partida.encerrarJogo();

@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerGUI {
     private JFrame frame;
-    private JPanel currentPanel;
+    private static JPanel currentPanel;
     private ConcurrentHashMap<Integer, Partida> partidas;
     private int nextPartidaId = 1;
     private GameServer gameServer;
@@ -293,7 +293,7 @@ public class ServerGUI {
     }
 
     // PARTIDA SCREEN
-    private void mostrarTelaPartida(int partidaId) {
+    public void mostrarTelaPartida(int partidaId) {
         Partida partida = this.gameServer.getPartidas().get(partidaId);
         if (partida != null) {
             PartidaPanel panel = new PartidaPanel(partida);
@@ -314,7 +314,7 @@ public class ServerGUI {
         }
     }
 
-    public void atualizarListaPartidas() {
+    public static void atualizarListaPartidas() {
         if (currentPanel instanceof GamesListPanel) {
             ((GamesListPanel) currentPanel).atualizarLista();
         }

@@ -22,7 +22,7 @@ public class Partida {
     // Durações padrão para cada modo
     public static final int FACIL_DURATION = 180;
     public static final int MEDIO_DURATION = 120;
-    public static final int DIFICIL_DURATION = 20;
+    public static final int DIFICIL_DURATION = 60;
 
 
     public Partida(int id, String modo, int totalPlayers) {
@@ -159,7 +159,7 @@ public class Partida {
             this.startTime = System.currentTimeMillis(); // Reinicia o timer quando o primeiro jogador entra
         }
 
-        GameServer.ServerGUI.atualizarListaPartidas();
+        ServerGUI.atualizarListaPartidas();
 
     }
 

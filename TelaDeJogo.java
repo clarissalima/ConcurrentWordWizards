@@ -13,46 +13,86 @@ public class TelaDeJogo extends JFrame {
     private JLabel dicaLabel, statusLabel, fimJogo, mensagemLabel;
     private JTextArea resultadoArea;
     private String palpite;
-    private int playerNumber; // Guarda o palpite do jogador
+    private int playerNumber;
 
     public TelaDeJogo(String palavraSecreta, String dica, int playerNumber) {
         this.palavraSecreta = palavraSecreta;
         this.playerNumber = playerNumber;
 
-        // Configurações da janela
         setTitle("Jogo de Adivinhação de Palavras");
-        setSize(400, 300);
+        setSize(450, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Criar painel e layout
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        // Painel de fundo com gradiente
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 182, 193),
+                        getWidth(), getHeight(), new Color(255, 105, 180));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        backgroundPanel.setLayout(new BoxLayout(backgroundPanel, BoxLayout.Y_AXIS));
+        backgroundPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Exibir dica
+        // Label de dica
         dicaLabel = new JLabel("Jogador " + playerNumber + " - Dica: " + dica);
-        panel.add(dicaLabel);
+        dicaLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        dicaLabel.setForeground(Color.WHITE);
+        dicaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        backgroundPanel.add(dicaLabel);
+
+        backgroundPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Campo de texto para o palpite
         guessField = new JTextField();
-        panel.add(guessField);
+        guessField.setFont(new Font("Arial", Font.PLAIN, 14));
+        guessField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(255, 182, 193), 2),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        guessField.setMaximumSize(new Dimension(300, 30));
+        backgroundPanel.add(guessField);
+
+        backgroundPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Botão para submeter o palpite
         submitButton = new JButton("Submeter Palpite");
-        panel.add(submitButton);
+        submitButton.setFont(new Font("Arial", Font.BOLD, 14));
+        submitButton.setBackground(new Color(255, 105, 180));
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createEmptyBorder(5, 20, 5, 20)
+        ));
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        backgroundPanel.add(submitButton);
 
-        // Status do jogo
-        statusLabel = new JLabel("Tente adivinhar a palavra!");
-        panel.add(statusLabel);
+        backgroundPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Área de resultado
         resultadoArea = new JTextArea(5, 30);
         resultadoArea.setEditable(false);
-        panel.add(new JScrollPane(resultadoArea));
+        resultadoArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        resultadoArea.setForeground(new Color(70, 70, 70));
+        resultadoArea.setBackground(new Color(255, 255, 255, 180));
+        resultadoArea.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(255, 182, 193), 2),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+        JScrollPane scrollPane = new JScrollPane(resultadoArea);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        backgroundPanel.add(scrollPane);
 
         // Adicionar o painel à janela
-        add(panel);
-
+        add(backgroundPanel);
         // Ação do botão
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -89,9 +129,6 @@ public class TelaDeJogo extends JFrame {
         return palpite;
     }
 
-    public void atualizarMensagem(String mensagem) {
-        dicaLabel.setText(mensagem);
-    }
 
     // Método para exibir a janela de forma assíncrona
     public void exibirTela() {
@@ -102,11 +139,6 @@ public class TelaDeJogo extends JFrame {
             }
         });
     }
-//
-//    public void exibirResultado(String rankingFinal) {
-//        dicaLabel.setText("Fim de jogo");
-//        resultadoArea.append(rankingFinal);
-//    }
 
     public void exibirResultado(String rankingFinal) {
         // Remove todos os componentes atuais
@@ -162,7 +194,6 @@ public class TelaDeJogo extends JFrame {
         ));
         closeButton.addActionListener(e -> dispose());
 
-        // Adiciona os componentes ao painel
         resultPanel.add(Box.createVerticalGlue());
         resultPanel.add(titleLabel);
         resultPanel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -177,13 +208,10 @@ public class TelaDeJogo extends JFrame {
         resultPanel.add(closeButton);
         resultPanel.add(Box.createVerticalGlue());
 
-        // Adiciona o painel ao frame e atualiza
         add(resultPanel);
         revalidate();
         repaint();
-//
-//        // Centraliza a janela novamente
-//        setLocationRelativeTo(null);
+
     }
 
     public void atualizarTela(String palavraSecreta, String dica, int playerNumber) {
@@ -194,9 +222,4 @@ public class TelaDeJogo extends JFrame {
     }
 
 
-//    // Método principal apenas para testes, não faz parte da solução final
-//    public static void main(String[] args) {
-//        TelaDeJogo tela = new TelaDeJogo("EXEMPLO", "É algo comum na informática.");
-//        tela.exibirTela();
-//    }
 }
