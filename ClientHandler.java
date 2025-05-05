@@ -33,7 +33,7 @@ public class ClientHandler extends Thread {
         tela = null;
 
         try {
-            // 1. Initialize game interface
+            // Initialize game interface
             try {
                 tela = new TelaDeJogo("", "", playerNumber);
                 tela.exibirTela();
@@ -42,15 +42,15 @@ public class ClientHandler extends Thread {
                 return;
             }
 
-            // 2. Set up I/O streams
+            //Set up I/O streams
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            // 3. Send welcome message
+            //Send welcome message
             output.println("Bem-vindo ao jogo! Você tem " + ROUNDS + " rodadas.");
             startTime = System.currentTimeMillis();
 
-            // 4. Start game timer (only for first player)
+            //Start game timer (only for first player)
             if (playerNumber == 1) {
                 partida.setSockets(Collections.singletonList(clientSocket));
                 partida.iniciarTemporizador();
@@ -60,7 +60,7 @@ public class ClientHandler extends Thread {
                 partida.enviarParaTodos(startMsg);
             }
 
-            // 5. Game rounds loop
+            // Game rounds loop
             for (int i = 0; i < ROUNDS && !partida.estaEncerrada(); i++) {
                 String[] wordInfo = partida.getPalavraDaRodada(i);
                 String secretWord = wordInfo[0];
@@ -71,7 +71,7 @@ public class ClientHandler extends Thread {
                 output.println("\nRodada " + (i + 1) + "/" + ROUNDS);
                 output.println("Dica: " + hint);
 
-                // 6. Word guessing loop
+                //Word guessing loop
                 boolean acertou = false;
                 while (!acertou && !partida.estaEncerrada()) {
                     String guess = tela.getPalpite();

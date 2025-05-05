@@ -102,7 +102,7 @@ public class ServerGUI {
         playersLabel.setForeground(Color.WHITE);
         playersLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        SpinnerModel spinnerModel = new SpinnerNumberModel(2, 2, 10, 1);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 10, 1);
         JSpinner playersSpinner = new JSpinner(spinnerModel);
         playersSpinner.setPreferredSize(new Dimension(60, 30));
 
