@@ -14,10 +14,9 @@ public class Partida {
     private int jogadoresFinalizados = 0;
     private boolean jogoEncerrado = false;
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    //private static int GAME_DURATION_SECONDS;
     private int gameDuration;
     private long startTime;
-    private List<Socket> sockets;
+    // REMOVIDO: private List<Socket> sockets; // Não é mais necessário, os sockets estão nos ClientHandlers
 
     // Durações padrão para cada modo
     public static final int FACIL_DURATION = 180;
@@ -29,21 +28,13 @@ public class Partida {
         this.id = id;
         this.modo = modo.toLowerCase();
         this.totalPlayers = totalPlayers;
-        //definirModoJogo(modo);
         this.gameDuration = calcularDuracao(modo);
         this.startTime = System.currentTimeMillis();
         gerarPalavrasParaRodadas(this.modo);
     }
 
-    //private List<Socket> sockets;
-
-    public void setSockets(List<Socket> sockets) {
-        this.sockets = sockets;
-    }
-
-    public List<Socket> getSockets() {
-        return sockets;
-    }
+    // REMOVIDO: public void setSockets(List<Socket> sockets) { this.sockets = sockets; }
+    // REMOVIDO: public List<Socket> getSockets() { return sockets; }
 
     private int calcularDuracao(String modo) {
         switch (modo.toLowerCase()) {
@@ -58,19 +49,15 @@ public class Partida {
         }
     }
 
-
-
-
     private void gerarPalavrasParaRodadas(String modo) {
         this.palavrasRodadas.clear();
         List<String[]> palavrasSelecionadas = PalavrasDoJogo.getPalavrasPorDiculdade(modo);
         this.palavrasRodadas.addAll(palavrasSelecionadas);
 
-
         System.out.println("Partida " + id + " - Modo: " + modo +
                 " - Palavras carregadas: " + palavrasRodadas.size());
         if (!palavrasRodadas.isEmpty()) {
-            System.out.println("Primeira palavra." +
+            System.out.println("Primeira palavra: " + palavrasRodadas.get(0)[0] +
                     " - Dica: " + palavrasRodadas.get(0)[1]);
         }
     }
@@ -84,21 +71,27 @@ public class Partida {
         RankingJogador rankingJogador = new RankingJogador(playerNumber, score, tempoTotal);
         ranking.add(rankingJogador);
 
-        if (clients.size() == totalPlayers) {
-            // Verificar se é o último jogador, se sim, encerra a partida e envia o ranking
-            return playerNumber == totalPlayers;  // RETORNA TRUE APENAS PARA O ÚLTIMO JOGADOR
+        // Verifica se todos os jogadores já registraram seus rankings
+        // (Isso é uma simplificação, idealmente um contador de jogadoresFinalizados seria mais robusto)
+        // O `true` para `ultimo` só deve ser retornado uma vez para quem dispara o ranking final.
+        if (ranking.size() == totalPlayers) {
+            return true; // É o último a registrar ranking
         }
         return false;
     }
 
     public synchronized void verificaTerminoJogo() {
         if (clients.stream().allMatch(ClientHandler::terminou)) {
-            jogoEncerrado = true; // Corrigido: O nome da variável era `encerrado` e estava errado.
+            jogoEncerrado = true;
             System.out.println("A partida " + id + " foi encerrada!");
         }
     }
 
     public void iniciarTemporizador() {
+        // Notifica todos os clientes que a partida vai iniciar
+        String startMsg = "PARTIDA_INICIADA|" + getGameDuration();
+        enviarParaTodos(startMsg); // Envia para todos os ClientHandlers
+
         scheduler.schedule(() -> {
             if (!estaEncerrada()) {
                 System.out.println("Tempo esgotado! Encerrando partida " + id);
@@ -116,12 +109,12 @@ public class Partida {
         System.out.println("Partida " + id + " - Ranking Final:\n" + rankingFinal);
 
         for (ClientHandler client : clients) {
-            client.enviarRanking(rankingFinal);
-            client.exibirResultado(rankingFinalComplete);
-            client.encerrar();
+            client.enviarRanking(rankingFinal); // Envia o ranking para cada cliente
+            client.exibirResultado(rankingFinalComplete); // Isso é um stub, a exibição é no cliente
+            client.encerrar(); // Fecha a conexão do cliente
         }
 
-        SwingUtilities.invokeLater(() -> RankingPanel.mostrarRanking(ranking));
+        // REMOVIDO: SwingUtilities.invokeLater(() -> RankingPanel.mostrarRanking(ranking)); // Agora é responsabilidade do cliente
         scheduler.shutdown();
     }
 
@@ -154,16 +147,12 @@ public class Partida {
         }
         clients.add(client);
 
-        if (clients.size() == 1) { // Primeiro jogador
-            this.sockets = Collections.singletonList(client.clientSocket);
+        if (clients.size() == 1) { // Primeiro jogador a entrar
             this.startTime = System.currentTimeMillis(); // Reinicia o timer quando o primeiro jogador entra
         }
 
-        ServerGUI.atualizarListaPartidas();
-
+        // REMOVIDO: ServerGUI.atualizarListaPartidas(); // Não é mais necessário
     }
-
-
 
     public boolean estaCheia() {
         return clients.size() >= totalPlayers;
@@ -173,29 +162,7 @@ public class Partida {
         return jogoEncerrado;
     }
 
-    //acho que esse metodo nao ta sendo usado e ta duplicado em getrankingfinal
-    public synchronized String obterRankingFinal() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n ---------------- Ranking Final ----obter-----------\n");
-
-        if (ranking.isEmpty()) {
-            sb.append("Nenhum jogador terminou a tempo.\n");
-            return sb.toString();
-        }
-
-        ranking.sort(Comparator
-                .comparingInt((RankingJogador r) -> r.score).reversed() // primeiro ordena pela pontuação
-                .thenComparingLong(r -> r.tempo)); //ordena pelo tempo
-
-        // ranking dos tres melhores
-        for (int i = 0; i < Math.min(3, ranking.size()); i++) {
-            RankingJogador r = ranking.get(i);
-            sb.append(String.format("%dº lugar - Jogador %d | Pontos: %d | Tempo: %.2f segundos\n",
-                    i + 1, r.playerNumber, r.score, r.tempo / 1000.0));
-        }
-
-        return sb.toString();
-    }
+    // REMOVIDO: public synchronized String obterRankingFinal() { ... } // Duplicado de getRankingFinal()
 
     public void enviarRankingParaTodos(String rankingFinal) {
         for (ClientHandler client : clients) {
@@ -220,29 +187,10 @@ public class Partida {
         return this.gameDuration;
     }
 
-
     public void enviarParaTodos(String mensagem) {
         clients.forEach(client -> client.enviarMensagem(mensagem));
     }
 
-
-    public String getInfoPartida() {
-        return String.format("Partida %d - %s (%d/%d) %02d:%02d",
-                id,
-                modo.toUpperCase(),
-                clients.size(),
-                totalPlayers,
-                getTempoRestante() / 60,
-                getTempoRestante() % 60);
-    }
-
-    // Na classe Partida
-    public int getTempoRestante() {
-        int decorrido = (int)((System.currentTimeMillis() - startTime) / 1000);
-        return Math.max(0, gameDuration - decorrido); // Nunca retorna negativo
-    }
-
-
-
-
+    // REMOVIDO: public String getInfoPartida() { ... } // Não é mais necessário para a GUI do servidor
+    // REMOVIDO: public int getTempoRestante() { ... } // Agora a ClientGUI calcula com base na duração total
 }
