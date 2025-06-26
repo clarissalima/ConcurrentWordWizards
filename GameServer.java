@@ -17,31 +17,21 @@ public class GameServer {
     private static int nextPartidaId = 1;
     private static ExecutorService executor = Executors.newCachedThreadPool();
 
-    private static ServerGUI serverGUI;
+    // REMOVIDO: private static ServerGUI serverGUI; // Não precisamos mais da GUI do servidor aqui
 
-
-
-    public void setServerGUI(ServerGUI gui) {
-        GameServer.serverGUI = gui;
-    }
+    // REMOVIDO: public void setServerGUI(ServerGUI gui) { GameServer.serverGUI = gui; } // Não precisamos mais
 
     public static ConcurrentHashMap<Integer, Partida> getPartidas() {
         return partidas;
     }
 
-
-    public static ServerGUI getServerGUI() {
-        return serverGUI;
-    }
-
+    // REMOVIDO: public static ServerGUI getServerGUI() { return serverGUI; } // Não precisamos mais
 
     public static void main(String[] args) {
 
-        GameServer server = new GameServer();
-
-        ServerGUI gui = new ServerGUI(server); // Passa a instância do servidor
-        server.setServerGUI(gui);
-
+        // REMOVIDO: GameServer server = new GameServer(); // Não é mais necessário instanciar a si mesmo
+        // REMOVIDO: ServerGUI gui = new ServerGUI(server); // Não precisamos mais da GUI do servidor
+        // REMOVIDO: server.setServerGUI(gui); // Não precisamos mais
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Servidor iniciado na porta: " + PORT);
@@ -68,30 +58,11 @@ public class GameServer {
         partidas.put(partidaId, partida);
 
         System.out.println("Partida " + partidaId + " criada! Aguardando jogadores...");
-        if (serverGUI != null) {
-            ServerGUI.atualizarListaPartidas();
-        }
+        // REMOVIDO: if (serverGUI != null) { ServerGUI.atualizarListaPartidas(); } // Não precisamos mais
         return partidaId;
     }
 
-    private static void listarPartidas() {
-        if (partidas.isEmpty()) {
-            System.out.println("Nenhuma partida ativa no momento.");
-            return;
-        }
-
-        System.out.println("\n--- Partidas Ativas ---");
-        for (Map.Entry<Integer, Partida> entry : partidas.entrySet()) {
-            Partida p = entry.getValue();
-            System.out.printf("Partida %d - Modo: %s - Jogadores: %d/%d - Status: %s%n",
-                    entry.getKey(),
-                    p.modo,
-                    p.clients.size(),
-                    p.totalPlayers,
-                    p.estaEncerrada() ? "Encerrada" : "Em andamento");
-        }
-        System.out.println();
-    }
+    // REMOVIDO: private static void listarPartidas() { ... } // Não será mais chamado do servidor, mas sim solicitado pelo cliente
 
     private static void tratarNovoCliente(Socket clientSocket) {
         BufferedReader input = null;
@@ -101,66 +72,102 @@ public class GameServer {
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            // Enviar lista de partidas disponíveis
-            output.println("Bem-vindo ao servidor de jogos!");
-            output.println("Partidas disponíveis:");
+            // O servidor agora espera um comando inicial do cliente
+            String comandoInicial = input.readLine();
+            System.out.println("Comando inicial do cliente: " + comandoInicial);
 
-            PrintWriter finalOutput = output;
-            partidas.entrySet().stream()
-                    .filter(e -> !e.getValue().estaCheia() && !e.getValue().estaEncerrada())
-                    .forEach(e -> {
-                        Partida p = e.getValue();
-                        finalOutput.printf("%d - Modo %s (%d/%d jogadores)%n",
-                                e.getKey(), p.modo, p.clients.size(), p.totalPlayers);
-                    });
-
-            output.println("Digite o número da partida que deseja entrar");
-
-            String resposta = input.readLine();
-            if (resposta == null) {
+            if (comandoInicial == null) {
                 clientSocket.close();
                 return;
             }
 
-            try {
-                int partidaId = Integer.parseInt(resposta.trim());
-                Partida partida = partidas.get(partidaId);
-
-                if (partida == null || partida.estaEncerrada()) {
-                    output.println("Partida inválida ou já encerrada.");
-                    clientSocket.close();
-                    return;
-                }
-
-                if (partida.estaCheia()) {
-                    output.println("Partida já está cheia.");
-                    GameServer.notificarInicioPartida(partidaId);
-                    clientSocket.close();
-                    return;
-                }
-
-                int playerNumber = partida.clients.size() + 1;
-                ClientHandler clientHandler = new ClientHandler(clientSocket, playerNumber, partida);
-                partida.adicionarJogador(clientHandler);
-                ServerGUI.atualizarListaPartidas();
-
-                output.println("Você entrou na partida " + partidaId + " como Jogador " + playerNumber);
-
-                if (partida.estaCheia()) {
-                    System.out.println("Partida " + partidaId + " iniciando com " + partida.totalPlayers + " jogadores!");
-                    partida.iniciarTemporizador();
-                    GameServer.notificarInicioPartida(partidaId);
-                    for (ClientHandler client : partida.clients) {
-                        client.start();
+            // Processar comandos do cliente
+            if (comandoInicial.startsWith("CRIAR_PARTIDA")) {
+                String[] partes = comandoInicial.split("\\|");
+                if (partes.length == 3) {
+                    String modo = partes[1];
+                    int totalPlayers = Integer.parseInt(partes[2]);
+                    try {
+                        int partidaId = criarNovaPartida(modo, totalPlayers);
+                        output.println("PARTIDA_CRIADA|" + partidaId); // Confirma a criação da partida
+                        System.out.println("Cliente solicitou criação de partida " + partidaId);
+                    } catch (IOException e) {
+                        output.println("ERRO|Falha ao criar partida.");
+                        e.printStackTrace();
                     }
                 } else {
-                    output.println("Aguardando mais jogadores... (" + partida.clients.size() + "/" + partida.totalPlayers + ")");
+                    output.println("ERRO|Formato inválido para CRIAR_PARTIDA.");
                 }
+            } else if (comandoInicial.equals("LISTAR_PARTIDAS")) {
+                StringBuilder sb = new StringBuilder("LISTA_PARTIDAS|");
+                if (partidas.isEmpty()) {
+                    sb.append("Nenhuma partida ativa no momento.");
+                } else {
+                    partidas.entrySet().stream()
+                            .filter(e -> !e.getValue().estaCheia() && !e.getValue().estaEncerrada())
+                            .forEach(e -> {
+                                Partida p = e.getValue();
+                                sb.append(String.format("%d;%s;%d;%d,",
+                                        e.getKey(), p.modo, p.clients.size(), p.totalPlayers));
+                            });
+                    // Remove a última vírgula se houver partidas
+                    if (sb.charAt(sb.length() - 1) == ',') {
+                        sb.deleteCharAt(sb.length() - 1);
+                    }
+                }
+                output.println(sb.toString()); // Envia a lista de partidas
+                System.out.println("Cliente solicitou lista de partidas.");
 
-            } catch (NumberFormatException e) {
-                output.println("Entrada inválida.");
-                clientSocket.close();
+            } else if (comandoInicial.startsWith("ENTRAR_PARTIDA")) {
+                String[] partes = comandoInicial.split("\\|");
+                if (partes.length == 2) {
+                    try {
+                        int partidaId = Integer.parseInt(partes[1]);
+                        Partida partida = partidas.get(partidaId);
+
+                        if (partida == null || partida.estaEncerrada()) {
+                            output.println("ERRO|Partida inválida ou já encerrada.");
+                            clientSocket.close();
+                            return;
+                        }
+
+                        if (partida.estaCheia()) {
+                            output.println("ERRO|Partida já está cheia.");
+                            // GameServer.notificarInicioPartida(partidaId); // Esta notificação agora virá do ClientHandler
+                            clientSocket.close();
+                            return;
+                        }
+
+                        int playerNumber = partida.clients.size() + 1;
+                        ClientHandler clientHandler = new ClientHandler(clientSocket, playerNumber, partida);
+                        partida.adicionarJogador(clientHandler);
+                        // REMOVIDO: ServerGUI.atualizarListaPartidas(); // Não é mais necessário
+
+                        output.println("ENTROU_PARTIDA|" + partidaId + "|" + playerNumber); // Confirma que o jogador entrou
+
+                        if (partida.estaCheia()) {
+                            System.out.println("Partida " + partidaId + " iniciando com " + partida.totalPlayers + " jogadores!");
+                            partida.iniciarTemporizador();
+                            GameServer.notificarInicioPartida(partidaId); // Notifica inicio (agora via ClientHandler para clientes)
+                            for (ClientHandler client : partida.clients) {
+                                client.start(); // Inicia a thread do handler para cada cliente
+                            }
+                        } else {
+                            output.println("AGUARDANDO_JOGADORES|" + partida.clients.size() + "|" + partida.totalPlayers);
+                        }
+
+                    } catch (NumberFormatException e) {
+                        output.println("ERRO|ID de partida inválido.");
+                        clientSocket.close();
+                    }
+                } else {
+                    output.println("ERRO|Formato inválido para ENTRAR_PARTIDA.");
+                }
+            } else {
+                output.println("ERRO|Comando desconhecido.");
+                clientSocket.close(); // Fecha a conexão se o comando inicial não for reconhecido
             }
+
         } catch (IOException e) {
             System.out.println("Erro ao tratar novo cliente: " + e.getMessage());
             try {
@@ -174,60 +181,16 @@ public class GameServer {
     }
 
     //notifica inicio da partida
-//    public static ConcurrentHashMap<Integer, Partida> getPartidas() {
-//        return partidas;
-//    }
-
     public static void notificarInicioPartida(int partidaId) {
         Partida partida = partidas.get(partidaId);
-        if (partida != null && serverGUI != null) {
-            String mensagem = "PARTIDA_INICIADA|" + partida.getGameDuration();
-            partida.enviarParaTodos(mensagem);
-            serverGUI.atualizarParaTelaDePartida(partidaId);
+        if (partida != null) {
+            // A mensagem de "PARTIDA_INICIADA" será enviada diretamente pelo ClientHandler aos seus respectivos clientes
+            // quando a partida estiver cheia. Não há mais GUI do servidor para atualizar aqui.
+            // A GUI do cliente receberá essa mensagem e mudará para a tela de jogo.
+            System.out.println("Notificando início da partida " + partidaId + " para os clientes.");
         }
     }
 
-    public void atualizarGUIparaPartida(int partidaId) {
-        if (this.serverGUI != null) {
-            this.serverGUI.mostrarTelaPartida(partidaId);
-        }
-    }
-
-    public void iniciarCronometro(int segundosTotais, List<Socket> jogadores) {
-        new Thread(() -> {
-            try {
-                for (int i = segundosTotais; i >= 0; i--) {
-                    String msg;
-                    if (i == segundosTotais) {
-                        msg = " A partida começou! Tempo total: " + segundosTotais + " segundos.";
-                    } else if (i == 10) {
-                        msg = "Faltam apenas 10 segundos!";
-                    } else if (i == 0) {
-                        msg = "Tempo esgotado! A partida será encerrada.";
-                    } else {
-                        msg = "Tempo restante: " + i + " segundos";
-                    }
-
-                    for (Socket socket : jogadores) {
-                        try {
-                            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                            out.println(msg);
-                        } catch (IOException e) {
-                            System.out.println("Erro ao enviar cronômetro para jogador: " + e.getMessage());
-                        }
-                    }
-
-                    System.out.println("[Servidor] " + msg);
-                    Thread.sleep(1000);
-                }
-            } catch (Exception e) {
-                System.out.println("Erro no cronômetro: " + e.getMessage());
-            }
-        }).start();
-    }
+    // REMOVIDO: public void atualizarGUIparaPartida(int partidaId) { ... } // Não precisamos mais
+    // REMOVIDO: public void iniciarCronometro(int segundosTotais, List<Socket> jogadores) { ... } // Lógica movida ou adaptada
 }
-
-
-
-
-

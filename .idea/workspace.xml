@@ -6,15 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="42b44039-1a6b-4431-86cb-045915210277" name="Changes" comment="initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Partida.java" beforeDir="false" afterPath="$PROJECT_DIR$/Partida.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ServerGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/ServerGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TelaDeJogo.java" beforeDir="false" afterPath="$PROJECT_DIR$/TelaDeJogo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer$ServerGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/GameServer$ServerGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ConcurrentWordWizards/TelaDeJogo.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +59,7 @@
     &quot;Application.GameServer.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/clari/ConcurrentWordWizards&quot;,
