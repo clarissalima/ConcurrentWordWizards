@@ -14,7 +14,7 @@ public class TelaDeJogo extends JFrame {
     public JTextArea resultadoArea; // Alterado para public para ClientGUI poder adicionar mensagens
     private volatile String palpiteEnviado = null; // Usado para comunicação com ClientGUI
     private int playerNumber;
-    private ClientGUI clientGUI; // Referência para a GUI principal do cliente
+    private ClienteGUI clienteGUI; // Referência para a GUI principal do cliente
 
     // Construtor atualizado para receber a referência à ClientGUI
     public TelaDeJogo(String palavraSecreta, String dica, int playerNumber) {
@@ -112,8 +112,8 @@ public class TelaDeJogo extends JFrame {
     }
 
     // Este método agora é chamado pela ClientGUI
-    public void setClientGUI(ClientGUI gui) {
-        this.clientGUI = gui;
+    public void setClientGUI(ClienteGUI gui) {
+        this.clienteGUI = gui;
     }
 
     // Método que retorna o palpite do jogador (agora para ser chamado pela ClientGUI)

@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +12,7 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ClientGUI extends JFrame {
+public class ClienteGUI extends JFrame {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 49160;
 
@@ -21,7 +23,7 @@ public class ClientGUI extends JFrame {
     private JPanel currentPanel;
 
     // Construtor
-    public ClientGUI() {
+    public ClienteGUI() {
         setTitle("Jogo de Adivinhação - Cliente");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -374,13 +376,13 @@ public class ClientGUI extends JFrame {
                                 // Inicia a thread que vai escutar as mensagens do jogo
                                 startListeningForGameMessages(partidaId, playerNumber);
                             } else if (response != null && response.startsWith("ERRO")) {
-                                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(ClientGUI.this,
+                                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(ClienteGUI.this,
                                         "Erro ao entrar na partida: " + response.split("\\|")[1],
                                         "Erro", JOptionPane.ERROR_MESSAGE));
                             } else if (response != null && response.startsWith("AGUARDANDO_JOGADORES")) {
                                 String[] parts = response.split("\\|");
                                 SwingUtilities.invokeLater(() -> {
-                                    JOptionPane.showMessageDialog(ClientGUI.this,
+                                    JOptionPane.showMessageDialog(ClienteGUI.this,
                                             "Aguardando mais jogadores... (" + parts[1] + "/" + parts[2] + ")",
                                             "Aguardando", JOptionPane.INFORMATION_MESSAGE);
                                 });
@@ -388,7 +390,7 @@ public class ClientGUI extends JFrame {
                                 startListeningForGameMessages(id, currentPlayers); // currentPlayers aqui é apenas placeholder para o playerNumber
                             }
                         } catch (IOException ex) {
-                            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(ClientGUI.this,
+                            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(ClienteGUI.this,
                                     "Erro de comunicação ao entrar na partida: " + ex.getMessage(),
                                     "Erro", JOptionPane.ERROR_MESSAGE));
                         }
@@ -434,13 +436,14 @@ public class ClientGUI extends JFrame {
                 while ((serverMessage = input.readLine()) != null) {
                     System.out.println("[Mensagem do Servidor]: " + serverMessage);
                     // Processar mensagens do servidor
+                    String finalServerMessage = serverMessage;
                     SwingUtilities.invokeLater(() -> {
-                        if (serverMessage.startsWith("PARTIDA_INICIADA")) {
+                        if (finalServerMessage.startsWith("PARTIDA_INICIADA")) {
                             gameStarted.set(true);
                             JOptionPane.showMessageDialog(this, "A partida começou!", "Jogo Iniciado", JOptionPane.INFORMATION_MESSAGE);
                             // Pode-se fazer mais coisas aqui, como iniciar o cronômetro na GUI do cliente
                             // int gameDuration = Integer.parseInt(serverMessage.split("\\|")[1]);
-                        } else if (serverMessage.startsWith("Rodada")) {
+                        } else if (finalServerMessage.startsWith("Rodada")) {
                             // Isso é uma mensagem de rodada do ClientHandler, incluindo a dica
                             // Ex: Rodada 1/4
                             // Dica: Linguagem de programação orientada a objetos.
@@ -450,8 +453,8 @@ public class ClientGUI extends JFrame {
 
                             // Adaptação: Vamos supor que a mensagem de dica do servidor agora inclui a palavra secreta para a TelaDeJogo.
                             // Ex: "DICA|JAVA|Linguagem de programação orientada a objetos."
-                            if (serverMessage.startsWith("DICA|")) {
-                                String[] parts = serverMessage.split("\\|");
+                            if (finalServerMessage.startsWith("DICA|")) {
+                                String[] parts = finalServerMessage.split("\\|");
                                 if (parts.length >= 3) {
                                     String secretWord = parts[1];
                                     String hint = parts[2];
@@ -461,30 +464,30 @@ public class ClientGUI extends JFrame {
                                 }
                             } else {
                                 if (gameScreen != null) {
-                                    gameScreen.resultadoArea.append(serverMessage + "\n");
+                                    gameScreen.resultadoArea.append(finalServerMessage + "\n");
                                     gameScreen.resultadoArea.setCaretPosition(gameScreen.resultadoArea.getDocument().getLength());
                                 }
                             }
-                        } else if (serverMessage.startsWith("FIM DE JOGO!")) {
+                        } else if (finalServerMessage.startsWith("FIM DE JOGO!")) {
                             if (gameScreen != null) {
-                                gameScreen.resultadoArea.append(serverMessage + "\n");
+                                gameScreen.resultadoArea.append(finalServerMessage + "\n");
                                 gameScreen.resultadoArea.setCaretPosition(gameScreen.resultadoArea.getDocument().getLength());
                             }
-                        } else if (serverMessage.startsWith("---------------- Ranking Final ---------------")) {
+                        } else if (finalServerMessage.startsWith("---------------- Ranking Final ---------------")) {
                             if (gameScreen != null) {
-                                gameScreen.exibirResultado(serverMessage); // Exibe o ranking final
+                                gameScreen.exibirResultado(finalServerMessage); // Exibe o ranking final
                             }
-                        } else if (serverMessage.equals("O jogo acabou! Obrigado por jogar.")) {
+                        } else if (finalServerMessage.equals("O jogo acabou! Obrigado por jogar.")) {
                             // A conexão será encerrada pelo ClientHandler. O cliente pode voltar ao menu principal.
                             if (gameScreen != null) {
                                 gameScreen.dispose(); // Fecha a tela de jogo
                             }
                             showMainMenu(); // Volta para o menu principal
-                            JOptionPane.showMessageDialog(ClientGUI.this, "O jogo terminou! Volte ao menu principal para jogar novamente.", "Fim de Jogo", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(ClienteGUI.this, "O jogo terminou! Volte ao menu principal para jogar novamente.", "Fim de Jogo", JOptionPane.INFORMATION_MESSAGE);
                             // Certifique-se de que o socket está fechado ou preparado para nova conexão se necessário
                         } else {
                             if (gameScreen != null) {
-                                gameScreen.resultadoArea.append(serverMessage + "\n");
+                                gameScreen.resultadoArea.append(finalServerMessage + "\n");
                                 gameScreen.resultadoArea.setCaretPosition(gameScreen.resultadoArea.getDocument().getLength());
                             }
                         }
@@ -497,7 +500,7 @@ public class ClientGUI extends JFrame {
                     if (gameScreen != null) {
                         gameScreen.dispose();
                     }
-                    JOptionPane.showMessageDialog(ClientGUI.this,
+                    JOptionPane.showMessageDialog(ClienteGUI.this,
                             "A conexão com o servidor foi perdida. Por favor, reinicie o cliente.",
                             "Conexão Perdida", JOptionPane.ERROR_MESSAGE);
                     System.exit(1);
@@ -577,6 +580,6 @@ public class ClientGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ClientGUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> new ClienteGUI().setVisible(true));
     }
 }
