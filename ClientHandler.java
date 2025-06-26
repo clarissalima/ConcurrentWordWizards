@@ -114,7 +114,7 @@ public class ClientHandler extends Thread {
 
             // Send final ranking if last player
             if (ultimo) {
-                String ranking = partida.obterRankingFinal();
+                String ranking = partida.getRankingFinal(); // CORRIGIDO: de obterRankingFinal() para getRankingFinal()
                 partida.enviarRankingParaTodos(ranking); // Envia o ranking para todos os clientes
                 System.out.println("Ranking enviado para todos os jogadores!");
                 partida.encerrarJogo(); // Encerrar a partida no lado do servidor

@@ -9,7 +9,7 @@ public class GameClient {
         // A lógica de conexão e interface agora está dentro de ClientGUI
         // O ClientGUI se conectará ao servidor e exibirá a interface.
         SwingUtilities.invokeLater(() -> {
-            new ClientGUI().setVisible(true);
+            new ClienteGUI().setVisible(true);
         });
     }
 }
