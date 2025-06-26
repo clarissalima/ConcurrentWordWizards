@@ -7,21 +7,24 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 public class TelaDeJogo extends JFrame {
-    private String palavraSecreta;
+    private String palavraSecreta; // Será usada para validação local do palpite
     private JTextField guessField;
     private JButton submitButton;
-    private JLabel dicaLabel, statusLabel, fimJogo, mensagemLabel;
-    private JTextArea resultadoArea;
-    private String palpite;
+    private JLabel dicaLabel;
+    public JTextArea resultadoArea; // Alterado para public para ClientGUI poder adicionar mensagens
+    private volatile String palpiteEnviado = null; // Usado para comunicação com ClientGUI
     private int playerNumber;
+    private ClientGUI clientGUI; // Referência para a GUI principal do cliente
 
+    // Construtor atualizado para receber a referência à ClientGUI
     public TelaDeJogo(String palavraSecreta, String dica, int playerNumber) {
         this.palavraSecreta = palavraSecreta;
         this.playerNumber = playerNumber;
 
-        setTitle("Jogo de Adivinhação de Palavras");
+        setTitle("Jogo de Adivinhação de Palavras - Jogador " + playerNumber);
         setSize(450, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Não queremos fechar o cliente inteiro
+        //setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Comentado, pois ClientGUI vai gerenciar isso
         setLocationRelativeTo(null);
 
         // Painel de fundo com gradiente
@@ -93,40 +96,44 @@ public class TelaDeJogo extends JFrame {
 
         // Adicionar o painel à janela
         add(backgroundPanel);
+
         // Ação do botão
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checarPalpite();
+                // A validação do palpite agora acontece aqui e o palpite é enviado ao servidor.
+                String palpite = guessField.getText().trim().toUpperCase();
+                if (!palpite.isEmpty()) {
+                    palpiteEnviado = palpite; // Sinaliza que há um palpite para ser pego
+                }
+                guessField.setText(""); // Limpa o campo para o próximo palpite
             }
         });
     }
 
-    // Método que checa o palpite do jogador
-    private void checarPalpite() {
-        palpite = guessField.getText().trim().toUpperCase();
-
-        // Verifica se o palpite está correto
-        if (palpite.equals(palavraSecreta)) {
-            resultadoArea.append("Parabéns! Você acertou a palavra: " + palavraSecreta + "\n");
-        } else {
-            resultadoArea.append("Palavra errada. Tente novamente!\n");
-        }
-
-        guessField.setText("");
+    // Este método agora é chamado pela ClientGUI
+    public void setClientGUI(ClientGUI gui) {
+        this.clientGUI = gui;
     }
 
-    // Método que retorna o palpite do jogador
+    // Método que retorna o palpite do jogador (agora para ser chamado pela ClientGUI)
     public String getPalpite() {
-        palpite = null;
-        while (palpite == null) {
-            try {
-                Thread.sleep(100); // Espera curta para não sobrecarregar a CPU
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        String currentPalpite = null;
+        while (currentPalpite == null) {
+            // Espera até que um palpite seja submetido pelo botão
+            if (palpiteEnviado != null) {
+                currentPalpite = palpiteEnviado;
+                palpiteEnviado = null; // Reseta para o próximo palpite
+            } else {
+                try {
+                    Thread.sleep(100); // Espera curta para não sobrecarregar a CPU
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
         }
-        return palpite;
+        return currentPalpite;
     }
 
 
@@ -220,6 +227,4 @@ public class TelaDeJogo extends JFrame {
         guessField.setText(""); // Limpa o campo de palpite
         resultadoArea.append("\nNova rodada! Dica: " + dica + "\n");
     }
-
-
 }
